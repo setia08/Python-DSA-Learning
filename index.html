@@ -1,0 +1,2517 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Python + DSA Interview Prep</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F3F5F8; --surface:#FFFFFF; --surface-2:#EBEFF5; --ink:#172033; --muted:#5A6579; --line:#D9DFE8;
+  --accent:#2450C9; --accent-soft:#E4EBFC; --accent-ink:#FFFFFF; --mari:#C98A00; --mari-soft:#FBF0D3;
+  --good:#137A4A; --good-bg:#E3F4EA; --bad:#B3261E; --bad-bg:#FBE7E5;
+  --code-bg:#142036; --code-ink:#E4EAF4; --code-muted:#8291AB;
+  --sans:"IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D131D; --surface:#141C29; --surface-2:#1B2534; --ink:#E6EBF2; --muted:#98A3B5; --line:#253144;
+    --accent:#7C9DFF; --accent-soft:#1D2A4A; --accent-ink:#0D131D; --mari:#F0BE48; --mari-soft:#33290F;
+    --good:#4CC38A; --good-bg:#12301F; --bad:#F28B82; --bad-bg:#3A1715;
+    --code-bg:#0A1019; --code-ink:#E4EAF4; --code-muted:#7C8AA3; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D131D; --surface:#141C29; --surface-2:#1B2534; --ink:#E6EBF2; --muted:#98A3B5; --line:#253144;
+  --accent:#7C9DFF; --accent-soft:#1D2A4A; --accent-ink:#0D131D; --mari:#F0BE48; --mari-soft:#33290F;
+  --good:#4CC38A; --good-bg:#12301F; --bad:#F28B82; --bad-bg:#3A1715;
+  --code-bg:#0A1019; --code-ink:#E4EAF4; --code-muted:#7C8AA3; color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 72px); height:100%}
+body{margin:0; background:var(--bg); color:var(--ink); font:16px/1.6 var(--sans); -webkit-font-smoothing:antialiased; min-height:100%}
+a{color:var(--accent)}
+code{font-family:var(--mono); font-size:.88em; background:var(--surface-2); padding:.08em .35em; border-radius:4px}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:6px}
+h1,h2,h3{line-height:1.25; margin:0}
+h1{font-size:1.75rem; font-weight:600; letter-spacing:-.01em}
+h2{font-size:1.2rem; font-weight:600}
+h3{font-size:1rem; font-weight:600}
+p{margin:.4em 0 .8em}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+
+/* ---------- layout ---------- */
+.app{display:grid; grid-template-columns:268px minmax(0,1fr); min-height:100vh}
+.side{position:sticky; top:0; height:100vh; overflow-y:auto; border-right:1px solid var(--line); background:var(--surface); padding:20px 14px 28px}
+.brand{display:flex; align-items:baseline; gap:8px; padding:4px 10px 18px; text-decoration:none; color:var(--ink)}
+.brand b{font-family:var(--mono); font-weight:600; font-size:1.05rem}
+.brand span{color:var(--muted); font-size:.85rem}
+.navgroup{margin:6px 0 16px}
+.navgroup h4{margin:0 0 4px; padding:0 10px; font-size:.78rem; font-weight:600; color:var(--muted)}
+.nav a{display:flex; justify-content:space-between; align-items:center; gap:8px; padding:7px 10px; border-radius:7px; color:var(--ink); text-decoration:none; font-size:.94rem}
+.nav a:hover{background:var(--surface-2)}
+.nav a.on{background:var(--accent-soft); color:var(--accent); font-weight:500}
+.nav a .ct{font-family:var(--mono); font-size:.75rem; color:var(--muted)}
+.nav a.on .ct{color:var(--accent)}
+.sidefoot{margin-top:18px; padding:12px 10px 0; border-top:1px solid var(--line); font-size:.8rem; color:var(--muted)}
+
+.top{position:sticky; top:0; z-index:20; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(8px); -webkit-backdrop-filter:blur(8px); border-bottom:1px solid var(--line); padding:12px 28px; padding-top:calc(12px + env(safe-area-inset-top,0px)); top:0; display:flex; gap:12px; align-items:center}
+.menu-btn{display:none; background:none; border:1px solid var(--line); border-radius:8px; padding:7px 10px}
+.search{position:relative; flex:1; max-width:560px}
+.search input{width:100%; font:inherit; font-size:.95rem; padding:9px 12px 9px 36px; border:1px solid var(--line); border-radius:9px; background:var(--surface); color:var(--ink)}
+.search input:focus{outline:2px solid var(--accent); outline-offset:0; border-color:transparent}
+.search svg{position:absolute; left:11px; top:50%; transform:translateY(-50%); color:var(--muted)}
+.search kbd{position:absolute; right:10px; top:50%; transform:translateY(-50%); font-family:var(--mono); font-size:.72rem; color:var(--muted); border:1px solid var(--line); border-radius:4px; padding:0 5px}
+.results{position:absolute; left:0; right:0; top:calc(100% + 6px); background:var(--surface); border:1px solid var(--line); border-radius:10px; box-shadow:0 12px 32px rgba(10,20,40,.16); max-height:60vh; overflow:auto; display:none}
+.results.open{display:block}
+.results a{display:block; padding:9px 14px; text-decoration:none; color:var(--ink); border-bottom:1px solid var(--line)}
+.results a:last-child{border-bottom:0}
+.results a:hover,.results a.sel{background:var(--surface-2)}
+.results .rt{font-size:.75rem; color:var(--muted)}
+.sync{font-size:.8rem; color:var(--muted); white-space:nowrap}
+
+.main{min-width:0}
+.content{max-width:900px; padding:28px 28px 80px; margin:0 auto}
+.pagehead{margin:4px 0 22px}
+.pagehead p{color:var(--muted); max-width:68ch; margin:.5em 0 0}
+
+/* ---------- generic ---------- */
+.btn{display:inline-flex; align-items:center; gap:6px; border:1px solid var(--line); background:var(--surface); padding:8px 14px; border-radius:8px; font-size:.92rem; text-decoration:none; color:var(--ink)}
+.btn:hover{border-color:var(--muted)}
+.btn.pri{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:500}
+.btn.pri:hover{filter:brightness(1.07)}
+.btn.good{border-color:var(--good); color:var(--good)}
+.btn.bad{border-color:var(--bad); color:var(--bad)}
+.btn[disabled]{opacity:.5; cursor:not-allowed}
+.row{display:flex; flex-wrap:wrap; gap:8px; align-items:center}
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 18px}
+.chip{border:1px solid var(--line); background:var(--surface); border-radius:999px; padding:4px 12px; font-size:.85rem; color:var(--ink); text-decoration:none}
+.chip.on{background:var(--ink); color:var(--surface); border-color:var(--ink)}
+.tag{display:inline-block; font-size:.78rem; padding:1px 8px; border-radius:999px; background:var(--surface-2); color:var(--muted); text-decoration:none}
+a.tag:hover{color:var(--accent)}
+.lvl{font-size:.8rem; color:var(--muted); white-space:nowrap}
+.hot{font-size:.8rem; color:var(--mari); font-weight:500; white-space:nowrap}
+.status{font-size:.75rem; font-weight:500; padding:1px 8px; border-radius:999px; white-space:nowrap}
+.status.ok{background:var(--good-bg); color:var(--good)}
+.status.rev{background:var(--mari-soft); color:var(--mari)}
+
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:18px 20px; margin-bottom:16px}
+
+/* question items */
+.item{background:var(--surface); border:1px solid var(--line); border-radius:12px; margin-bottom:10px}
+.item.open{border-color:color-mix(in srgb, var(--accent) 45%, var(--line))}
+.ihead{width:100%; text-align:left; background:none; border:0; padding:15px 18px; display:grid; grid-template-columns:1fr auto; gap:6px 14px; align-items:start; border-radius:12px}
+.ihead .qt{font-weight:500; font-size:1rem}
+.ihead .meta{grid-column:1/-1; display:flex; flex-wrap:wrap; gap:6px 12px; align-items:center}
+.ihead .chev{color:var(--muted); transition:transform .15s}
+.item.open .chev{transform:rotate(90deg)}
+.ibody{display:none; padding:0 18px 18px; border-top:1px solid var(--line)}
+.item.open .ibody{display:block}
+.sec{margin-top:16px}
+.sec > h3{font-size:.85rem; font-weight:600; color:var(--muted); margin-bottom:4px}
+.callout{border-left:3px solid var(--mari); background:var(--mari-soft); padding:10px 14px; border-radius:0 8px 8px 0}
+.callout.bad{border-color:var(--bad); background:var(--bad-bg)}
+.callout.good{border-color:var(--good); background:var(--good-bg)}
+.hidden{display:none !important}
+.reveal-bar{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px; padding:12px; background:var(--surface-2); border-radius:9px; align-items:center}
+.reveal-bar .hintline{flex-basis:100%; font-size:.88rem; color:var(--muted)}
+
+/* code */
+pre{margin:0}
+.code{position:relative; background:var(--code-bg); color:var(--code-ink); border-radius:9px; margin:10px 0; overflow:hidden}
+.code pre{padding:14px 16px; overflow-x:auto; font:13.5px/1.6 var(--mono); tab-size:4}
+.code .copy{position:absolute; top:7px; right:7px; background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.14); color:var(--code-ink); border-radius:6px; font-size:.72rem; padding:3px 8px; opacity:.75}
+.code .copy:hover{opacity:1}
+.code .k{color:#8FB4FF}.code .s{color:#F2C97D}.code .c{color:var(--code-muted); font-style:italic}.code .n{color:#F5A48F}.code .b{color:#7FD1B9}.code .d{color:#D7A6FF}
+.plain{background:var(--surface-2); border:1px solid var(--line); border-radius:9px; padding:12px 14px; font:13.5px/1.6 var(--mono); overflow-x:auto; white-space:pre}
+.out{background:var(--surface-2); border-left:3px solid var(--good); border-radius:0 8px 8px 0; padding:10px 14px; font:13.5px/1.6 var(--mono); white-space:pre; overflow-x:auto}
+
+.cx{display:flex; flex-wrap:wrap; gap:8px 18px; font-size:.9rem}
+.cx b{font-family:var(--mono); font-weight:500}
+
+/* dashboard readout */
+.readout{background:var(--code-bg); color:var(--code-ink); border-radius:14px; padding:22px 24px; font-family:var(--mono); font-size:14px; overflow-x:auto}
+.readout .rl{display:grid; grid-template-columns:minmax(150px,auto) auto 4.5ch; gap:16px; align-items:center; white-space:nowrap; padding:3px 0}
+.readout .bar{color:#F0BE48; letter-spacing:1px}
+.readout .bar i{color:#33405A; font-style:normal}
+.readout .pc{text-align:right}
+.readout .lab{color:#B8C3D6}
+.readout hr{border:0; border-top:1px dashed #33405A; margin:10px 0}
+.readout .total .lab{color:#fff; font-weight:600}
+.readout .total .pc{color:#fff; font-weight:600}
+.readout .rhead{color:#8291AB; margin-bottom:10px; white-space:normal}
+.grid2{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; margin-top:16px}
+.stat{font-family:var(--mono); font-size:1.5rem; font-weight:600}
+.reclist{list-style:none; padding:0; margin:0}
+.reclist li{padding:10px 0; border-bottom:1px solid var(--line); display:flex; gap:12px; justify-content:space-between; align-items:center}
+.reclist li:last-child{border-bottom:0}
+.minibars{display:flex; gap:6px; align-items:flex-end; height:64px; margin-top:8px}
+.minibars div{flex:1; background:var(--accent); border-radius:4px 4px 0 0; min-height:3px; position:relative}
+.minibars span{position:absolute; top:-18px; left:0; right:0; text-align:center; font-size:.7rem; color:var(--muted); font-family:var(--mono)}
+
+/* tables */
+.tbl{width:100%; border-collapse:collapse; font-size:.9rem}
+.tbl th,.tbl td{text-align:left; padding:7px 10px; border-bottom:1px solid var(--line); vertical-align:top}
+.tbl th{font-weight:600; color:var(--muted); font-size:.8rem}
+.tbl td:first-child{font-family:var(--mono); font-size:.85rem}
+.tblwrap{overflow-x:auto}
+.cxgrid{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:14px}
+.finder td:first-child{font-family:var(--sans)}
+.finder a{text-decoration:none; font-weight:500}
+
+/* quiz */
+.qprog{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; font-size:.88rem; color:var(--muted)}
+.track{height:5px; background:var(--surface-2); border-radius:3px; overflow:hidden; margin-bottom:18px}
+.track div{height:100%; background:var(--accent); transition:width .25s}
+.opts{display:grid; gap:8px; margin-top:14px}
+.opt{text-align:left; border:1px solid var(--line); background:var(--surface); border-radius:9px; padding:11px 14px; display:flex; gap:12px; align-items:flex-start}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt .ol{font-family:var(--mono); color:var(--muted); font-size:.85rem; padding-top:1px}
+.opt.right{border-color:var(--good); background:var(--good-bg)}
+.opt.wrongpick{border-color:var(--bad); background:var(--bad-bg)}
+.opt[disabled]{cursor:default}
+.qtype{font-size:.78rem; font-weight:600; color:var(--accent)}
+.whylist{margin:6px 0 0; padding-left:18px}
+.whylist li{margin:4px 0}
+.score{font-family:var(--mono); font-size:2.6rem; font-weight:600; letter-spacing:-.02em}
+
+/* flashcards */
+.fc{min-height:240px; border:1px solid var(--line); background:var(--surface); border-radius:16px; padding:32px 28px; display:flex; flex-direction:column; justify-content:center; text-align:center; cursor:pointer; width:100%; font-size:1.15rem}
+.fc .side-lab{font-size:.78rem; color:var(--muted); margin-bottom:12px}
+.fc.back{background:var(--accent-soft); border-color:color-mix(in srgb,var(--accent) 40%, var(--line))}
+.boxes{display:flex; gap:6px; margin-top:6px}
+.boxes div{flex:1; text-align:center; background:var(--surface-2); border-radius:6px; padding:6px 0; font-size:.78rem; color:var(--muted)}
+.boxes b{display:block; font-family:var(--mono); font-size:1rem; color:var(--ink)}
+
+/* rapid */
+.rf{border-bottom:1px solid var(--line); padding:12px 2px}
+.rf:last-child{border-bottom:0}
+.rfq{display:flex; justify-content:space-between; gap:12px; align-items:flex-start}
+.rfa{margin-top:8px; padding:10px 14px; background:var(--surface-2); border-radius:8px}
+
+/* mock */
+.bubble{background:var(--surface-2); border-radius:12px 12px 12px 4px; padding:14px 16px; margin:10px 0}
+.bubble .who{font-size:.78rem; font-weight:600; color:var(--muted); margin-bottom:4px}
+textarea{width:100%; min-height:150px; font:inherit; font-size:.95rem; padding:12px 14px; border:1px solid var(--line); border-radius:10px; background:var(--surface); color:var(--ink); resize:vertical}
+textarea:focus{outline:2px solid var(--accent); border-color:transparent}
+.checks label{display:flex; gap:10px; align-items:flex-start; padding:6px 0; cursor:pointer}
+.checks input{margin-top:5px; accent-color:var(--accent)}
+.gradebox{display:grid; grid-template-columns:auto 1fr; gap:14px 18px; align-items:start}
+.gradebox .score{font-size:2rem}
+ul.tight{margin:4px 0; padding-left:18px}
+ul.tight li{margin:3px 0}
+
+ol.plan{margin:0; padding-left:0; list-style:none; counter-reset:p}
+ol.plan li{counter-increment:p; display:grid; grid-template-columns:2.2em 1fr; gap:4px 10px; padding:9px 0; border-bottom:1px solid var(--line)}
+ol.plan li:last-child{border-bottom:0}
+ol.plan li::before{content:counter(p); font-family:var(--mono); font-weight:600; color:var(--accent)}
+
+.pathcols{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:16px}
+.pathcols ol{margin:0; padding-left:1.6em}
+.pathcols li{padding:3px 0}
+
+.empty{text-align:center; padding:28px 16px; color:var(--muted)}
+.toast{position:fixed; left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px)); transform:translateX(-50%); background:var(--ink); color:var(--surface); padding:9px 16px; border-radius:8px; font-size:.9rem; z-index:60; opacity:0; transition:opacity .2s; pointer-events:none}
+.toast.show{opacity:1}
+.scrim{display:none}
+
+@media (max-width: 900px){
+  .app{grid-template-columns:1fr}
+  .side{position:fixed; z-index:50; top:0; bottom:0; left:0; width:min(300px,86vw); height:100%; transform:translateX(-105%); transition:transform .2s; padding-top:calc(20px + env(safe-area-inset-top,0px)); padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}
+  .side.open{transform:none; box-shadow:0 0 40px rgba(0,0,0,.25)}
+  .scrim.open{display:block; position:fixed; inset:0; background:rgba(8,12,20,.4); z-index:40}
+  .menu-btn{display:inline-flex}
+  .top{padding:10px 14px; padding-top:calc(10px + env(safe-area-inset-top,0px))}
+  .content{padding:20px 16px 64px}
+  .sync{display:none}
+  .search kbd{display:none}
+  h1{font-size:1.45rem}
+  .readout{padding:18px 16px; font-size:12.5px}
+  .readout .rl{grid-template-columns:minmax(118px,auto) auto 4.5ch; gap:10px}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important; animation:none !important} }
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="side" id="side" aria-label="Sections">
+    <a class="brand" href="#/dashboard"><b>py/dsa prep</b><span>interview edition</span></a>
+    <nav class="nav" id="nav"></nav>
+    <div class="sidefoot" id="sidefoot">Batch 1: interview essentials. More modules are on the learning path.</div>
+  </aside>
+  <div class="scrim" id="scrim"></div>
+  <div class="main">
+    <header class="top">
+      <button class="menu-btn" id="menuBtn" aria-label="Open menu">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        <input id="q" type="search" placeholder="Search questions, patterns, methods…" autocomplete="off" aria-label="Search">
+        <kbd>/</kbd>
+        <div class="results" id="results" role="listbox"></div>
+      </div>
+      <span class="sync" id="sync">Saved in this browser</span>
+    </header>
+    <main class="content" id="view"></main>
+  </div>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+// ===== PYTHON MOST-ASKED INTERVIEW QUESTIONS =====
+const PY = [
+{id:`py-list-tuple`, topic:`Data types`, tag:`Mutability`, diff:1, freq:5,
+ q:`What is the difference between a list and a tuple?`,
+ tests:`Whether you understand mutability and its consequences (hashability, intent), not just the bracket syntax.`,
+ hint:`Think about what you can change after creation, what can be used as a dict key, and what each one communicates to a reader.`,
+ answer:`Lists are mutable; tuples are immutable. Because a tuple can't change, a tuple whose items are all hashable is itself hashable, so it can be a dict key or a set member. A list never can. By convention a tuple is a fixed-shape record (a coordinate, a row, multiple return values), while a list is a growable collection of similar items. Tuples are also slightly smaller and faster to create, but that is rarely the reason to pick one.`,
+ explain:`Immutability applies to the tuple's slots: you can't rebind <code>t[0]</code>. If a slot holds a mutable object such as a list, that object can still change, and the tuple stops being hashable.`,
+ code:`point = (3, 4)
+d = {point: "A"}        # OK: a tuple of ints is hashable
+# d[[3, 4]] = "B"       # TypeError: unhashable type: 'list'
+
+t = ([1, 2], 3)
+t[0].append(99)         # allowed: the list inside changes
+print(t)                # ([1, 2, 99], 3)
+# hash(t)               # TypeError: unhashable type: 'list'
+
+import sys
+print(sys.getsizeof([1, 2, 3]) > sys.getsizeof((1, 2, 3)))  # True in CPython`,
+ wrong:`"A tuple is just a faster list" or "tuples are always hashable." Both miss the point; a tuple containing a list is not hashable.`,
+ follow:`Can the contents of a tuple ever change? When would you return a tuple from a function instead of a list?`,
+ related:[`Hashing`,`Immutability`,`Dict keys`],
+ points:[`Lists are mutable, tuples immutable`,`Tuples of hashable items are hashable, so they work as dict keys / set members`,`A tuple can contain mutable objects, which can still change`,`Intent: tuple = fixed record, list = growable collection`,`Minor memory/speed advantage for tuples`]},
+
+{id:`py-is-eq`, topic:`Operators`, tag:`Identity vs equality`, diff:1, freq:5,
+ q:`What is the difference between <code>is</code> and <code>==</code>?`,
+ tests:`Object identity vs value equality, and whether you know the correct <code>None</code> idiom.`,
+ hint:`One asks "same value?", the other asks "same object in memory?"`,
+ answer:`<code>==</code> compares values by calling <code>__eq__</code>. <code>is</code> compares identity: whether both names refer to the very same object (the same <code>id()</code>). Use <code>is</code> for singletons such as <code>None</code>, and <code>==</code> for everything else.`,
+ explain:`CPython caches small integers (−5 to 256) and interns some strings, so <code>is</code> can appear to work on them. That is an implementation detail; never rely on it. <code>x is None</code> is preferred over <code>x == None</code> because a class can override <code>__eq__</code>, while identity can't be faked.`,
+ code:`a = [1, 2, 3]
+b = [1, 2, 3]
+c = a
+print(a == b)   # True  - same value
+print(a is b)   # False - two different list objects
+print(a is c)   # True  - two names, one object
+
+x = None
+if x is None:   # the correct idiom
+    print("no value")`,
+ wrong:`"<code>is</code> checks that value and type are both equal." It checks neither; it checks identity.`,
+ follow:`Why can <code>a = 256; b = 256; a is b</code> print True while the same test with 1000 might print False?`,
+ related:[`id()`,`Interning`,`__eq__`],
+ points:[`== compares value via __eq__`,`is compares identity (same object, same id)`,`Use is for None and other singletons`,`Small-int caching / string interning is a CPython detail`,`__eq__ can be overridden, identity cannot`]},
+
+{id:`py-mutable-default`, topic:`Functions`, tag:`Mutability`, diff:2, freq:5,
+ q:`What is the mutable default argument problem?`,
+ tests:`When default values are evaluated, and whether you know the standard fix.`,
+ hint:`When does Python evaluate <code>bucket=[]</code>: on every call, or once?`,
+ answer:`Default values are evaluated once, when the <code>def</code> statement runs, and stored on the function object (<code>func.__defaults__</code>). A mutable default like <code>[]</code> or <code>{}</code> is therefore shared by every call that doesn't pass that argument, so changes leak between calls. The fix is to default to <code>None</code> and create a new object inside the function.`,
+ explain:`The function object holds one list. Every call that relies on the default appends to that same list.`,
+ code:`def add_item(item, bucket=[]):
+    bucket.append(item)
+    return bucket
+
+print(add_item(1))  # [1]
+print(add_item(2))  # [1, 2]   <- surprise: same list
+print(add_item.__defaults__)  # ([1, 2],)
+
+def add_item_fixed(item, bucket=None):
+    if bucket is None:
+        bucket = []         # a fresh list on every call
+    bucket.append(item)
+    return bucket`,
+ wrong:`"Python creates a new empty list each call." It doesn't; the default is evaluated once.`,
+ follow:`Is this behaviour ever useful? (Occasionally as a cache, but <code>functools.lru_cache</code> is clearer.)`,
+ related:[`Function objects`,`None sentinel`,`Closures`],
+ points:[`Defaults evaluated once at definition time`,`Stored on the function (__defaults__)`,`Mutable default shared across calls`,`Fix: default None, create the object inside`]},
+
+{id:`py-copy`, topic:`Lists`, tag:`Copying`, diff:2, freq:5,
+ q:`What is the difference between a shallow copy and a deep copy?`,
+ tests:`Whether you understand references inside containers, a frequent source of real bugs.`,
+ hint:`A shallow copy makes a new outer box. What goes inside it?`,
+ answer:`Assignment (<code>b = a</code>) copies nothing; both names refer to one object. A shallow copy creates a new outer container but fills it with references to the same inner objects, so nested objects are shared. A deep copy (<code>copy.deepcopy</code>) recursively copies the nested objects too, giving a fully independent structure.`,
+ explain:`Shallow copies: <code>lst.copy()</code>, <code>lst[:]</code>, <code>list(lst)</code>, <code>dict(d)</code>, <code>copy.copy(x)</code>. <code>deepcopy</code> keeps a memo dict of already-copied objects, which lets it handle cycles and shared references correctly.`,
+ code:`import copy
+grid = [[1, 2], [3, 4]]
+alias = grid                 # no copy at all
+shallow = grid.copy()        # new outer list, same inner lists
+deep = copy.deepcopy(grid)   # everything copied
+
+grid[0].append(99)
+print(shallow)  # [[1, 2, 99], [3, 4]]  inner lists are shared
+print(deep)     # [[1, 2], [3, 4]]      fully independent`,
+ wrong:`"<code>list.copy()</code> makes a completely independent copy." Only one level deep.`,
+ follow:`How does <code>deepcopy</code> cope with an object that refers to itself? How can a class customise it? (<code>__deepcopy__</code>)`,
+ related:[`References`,`Mutability`,`copy module`],
+ points:[`Assignment copies nothing`,`Shallow: new outer container, shared inner objects`,`Deep: recursively copies nested objects`,`Shallow copy methods: .copy(), [:], list(), copy.copy`,`deepcopy uses a memo to handle cycles`]},
+
+{id:`py-dict-o1`, topic:`Dictionaries`, tag:`Hashing`, diff:2, freq:5,
+ q:`Why is dictionary lookup generally O(1)? How does a dict work internally?`,
+ tests:`Hash tables, collisions, and the difference between average and worst case.`,
+ hint:`What does Python compute from the key before looking anything up?`,
+ answer:`A dict is a hash table. Python computes <code>hash(key)</code>, maps it to a slot in an internal table, and checks that slot. If the slot holds a different key (a collision), it probes other slots until it finds the key or an empty slot. A match requires an equal hash and then <code>==</code>. On average this touches a constant number of slots, so lookup, insert and delete are O(1) average. With many collisions it degrades to O(n). The table resizes as it fills, so insertion is amortized O(1).`,
+ explain:`Insertion order is preserved; that's a language guarantee since Python 3.7. In CPython (3.6+), a dict stores a compact array of entries in insertion order plus a sparse index table of slots pointing into it, which saves memory. CPython resolves collisions with open addressing (probing), not chaining. String hashes are randomised per process, so don't depend on hash values between runs.`,
+ code:`d = {}
+d["apple"] = 3
+# Roughly what happens:
+# 1. h = hash("apple")
+# 2. slot = h & (table_size - 1)
+# 3. empty slot -> store; same key -> update; other key -> probe further
+
+print("apple" in d)      # O(1) average
+print(list(d))           # insertion order preserved (3.7+)`,
+ wrong:`"Dict lookup is always O(1)" (it's average case) or "dicts are unordered" (outdated since 3.7).`,
+ follow:`What makes an object usable as a key? What breaks if two equal objects return different hashes?`,
+ related:[`Hash tables`,`Collisions`,`__hash__ / __eq__`,`Sets`],
+ points:[`Dict is a hash table`,`hash(key) mapped to a slot`,`Collisions resolved by probing (open addressing in CPython)`,`Match requires equal hash then ==`,`O(1) average, O(n) worst`,`Resizing makes insertion amortized O(1)`,`Insertion order guaranteed since 3.7`]},
+
+{id:`py-hashable`, topic:`Data types`, tag:`Hashing`, diff:2, freq:4,
+ q:`Why are tuples hashable but lists are not?`,
+ tests:`The contract between hashing and mutability.`,
+ hint:`What would happen to a dict if a key's hash changed after it was inserted?`,
+ answer:`A key's hash decides which slot it lives in. If the key could change after insertion, its hash would change and the dict would look in the wrong slot, so the entry would effectively be lost. Lists are mutable, so <code>list.__hash__</code> is set to <code>None</code>. A tuple can't change its slots, so its hash is computed from its items, but only if every item is itself hashable.`,
+ explain:`User-defined classes are hashable by default (hash based on identity). If you define <code>__eq__</code> without <code>__hash__</code>, Python sets <code>__hash__</code> to <code>None</code> so equal objects can't end up with different hashes.`,
+ code:`print(hash((1, 2)))        # works
+s = {(1, 2), (3, 4)}       # tuples as set members
+print(list.__hash__)       # None
+# hash([1, 2])             # TypeError: unhashable type: 'list'
+# hash((1, [2]))           # TypeError: a tuple containing a list`,
+ wrong:`"All immutable-looking containers are hashable." A tuple containing a list is not.`,
+ follow:`Are instances of your own classes hashable? What happens if you override <code>__eq__</code> only?`,
+ related:[`Dict internals`,`frozenset`,`__hash__`],
+ points:[`Hash determines the slot`,`Hash must not change while the object is a key`,`Lists are mutable so __hash__ is None`,`Tuple hash computed from items; all items must be hashable`]},
+
+{id:`py-generators`, topic:`Iterators & Generators`, tag:`Generators`, diff:2, freq:5,
+ q:`What does <code>yield</code> do? How do generators work?`,
+ tests:`Lazy evaluation, suspended execution state, and memory trade-offs.`,
+ hint:`What happens to the function's local variables between two calls to <code>next()</code>?`,
+ answer:`A function containing <code>yield</code> is a generator function. Calling it doesn't run the body; it returns a generator object. Each <code>next()</code> runs the body until the next <code>yield</code>, hands that value out, and suspends, keeping the local variables and position. The next <code>next()</code> resumes right after the <code>yield</code>. When the body finishes, <code>StopIteration</code> is raised. Values are produced lazily, one at a time, so memory stays O(1) however long the sequence is.`,
+ explain:`Generators are iterators: single-pass, and exhausted once consumed. Generator expressions <code>(x for x in ...)</code> are the inline form. <code>yield from</code> delegates to another iterable.`,
+ code:`def count_up(n):
+    i = 0
+    while i < n:
+        yield i      # pause here, hand i to the caller
+        i += 1
+
+g = count_up(3)
+print(next(g), next(g), next(g))  # 0 1 2
+# next(g) now raises StopIteration
+
+big = (x * x for x in range(10**9))   # no billion-item list is built
+print(next(big))  # 0`,
+ wrong:`"<code>yield</code> works like <code>return</code>." Return ends the function; yield pauses it.`,
+ follow:`Can you iterate a generator twice? What do <code>yield from</code> and <code>send()</code> do?`,
+ related:[`Iterators`,`Lazy evaluation`,`itertools`],
+ points:[`Calling a generator function returns a generator, body doesn't run`,`next() runs to the next yield and suspends`,`Local state preserved between calls`,`StopIteration at the end`,`Lazy, O(1) memory`,`Single-pass / exhaustible`]},
+
+{id:`py-decorators`, topic:`Decorators`, tag:`Decorators`, diff:3, freq:5,
+ q:`What is a decorator? Write one that times a function.`,
+ tests:`First-class functions, closures, <code>*args/**kwargs</code> forwarding, and <code>functools.wraps</code>.`,
+ hint:`<code>@timer</code> above <code>def f</code> is exactly <code>f = timer(f)</code>.`,
+ answer:`A decorator is a callable that takes a function and returns a replacement, usually a wrapper that adds behaviour before and after calling the original. <code>@dec</code> is syntactic sugar for <code>f = dec(f)</code>, applied once at definition time. It works because functions are first-class objects and the wrapper is a closure over the original function. Use <code>functools.wraps</code> so the wrapper keeps the original name and docstring.`,
+ explain:`Stacked decorators apply bottom-up: the one closest to <code>def</code> wraps first, so the top one runs first at call time. A decorator that takes arguments, such as <code>@retry(times=3)</code>, needs one more level: a function that returns the decorator.`,
+ code:`import functools, time
+
+def timer(func):
+    @functools.wraps(func)            # keep __name__, __doc__
+    def wrapper(*args, **kwargs):
+        start = time.perf_counter()
+        result = func(*args, **kwargs)
+        elapsed = time.perf_counter() - start
+        print(f"{func.__name__} took {elapsed:.4f}s")
+        return result                 # don't lose the return value!
+    return wrapper
+
+@timer                 # same as: slow_sum = timer(slow_sum)
+def slow_sum(n):
+    return sum(range(n))
+
+slow_sum(1_000_000)`,
+ wrong:`Forgetting to return <code>result</code> (the decorated function now returns <code>None</code>), or forgetting <code>wraps</code>.`,
+ follow:`Write <code>@retry(times=3)</code>. In what order do stacked decorators run?`,
+ related:[`Closures`,`First-class functions`,`functools`],
+ points:[`Takes a function, returns a replacement`,`@dec is f = dec(f) at definition time`,`Wrapper is a closure`,`Forward *args/**kwargs and return the result`,`functools.wraps preserves metadata`]},
+
+{id:`py-args-kwargs`, topic:`Functions`, tag:`Functions`, diff:1, freq:4,
+ q:`What are <code>*args</code> and <code>**kwargs</code>?`,
+ tests:`Argument packing and unpacking, and parameter ordering rules.`,
+ hint:`One collects into a tuple, the other into a dict. They also work at the call site.`,
+ answer:`In a function definition, <code>*args</code> collects extra positional arguments into a tuple and <code>**kwargs</code> collects extra keyword arguments into a dict. At a call site, <code>*</code> unpacks an iterable into positional arguments and <code>**</code> unpacks a dict into keyword arguments. The names are convention; the stars do the work.`,
+ explain:`Parameter order: regular positional, then <code>*args</code>, then keyword-only parameters, then <code>**kwargs</code>. A bare <code>*</code> forces everything after it to be keyword-only, and <code>/</code> (3.8+) makes everything before it positional-only.`,
+ code:`def describe(name, *args, sep=", ", **kwargs):
+    print(name, args, repr(sep), kwargs)
+
+describe("x", 1, 2, color="red")
+# x (1, 2) ', ' {'color': 'red'}
+
+nums = [1, 2, 3]
+opts = {"sep": "-"}
+print(*nums, **opts)        # 1-2-3
+
+def area(*, width, height):  # keyword-only
+    return width * height`,
+ wrong:`"<code>*args</code> is a list." It's a tuple.`,
+ follow:`What does a bare <code>*</code> in a signature do? Why do decorators use <code>*args, **kwargs</code>?`,
+ related:[`Unpacking`,`Decorators`,`Keyword-only parameters`],
+ points:[`*args collects extra positionals into a tuple`,`**kwargs collects extra keywords into a dict`,`* and ** unpack at call sites`,`Order: positional, *args, keyword-only, **kwargs`]},
+
+{id:`py-legb`, topic:`Scope & Closures`, tag:`Scope & closures`, diff:2, freq:5,
+ q:`Explain LEGB scope and closures.`,
+ tests:`Name resolution, why <code>UnboundLocalError</code> happens, and what a closure captures.`,
+ hint:`Where does Python look for a name, and in what order? What does assignment inside a function do to a name?`,
+ answer:`Python resolves names in the order Local → Enclosing → Global → Built-in. Any assignment to a name inside a function makes that name local for the whole function (decided at compile time), which is why reading it before the assignment raises <code>UnboundLocalError</code>. <code>global</code> and <code>nonlocal</code> override that. A closure is an inner function that remembers variables from its enclosing function's scope even after the outer function has returned. The captured variables live in cells (<code>func.__closure__</code>).`,
+ explain:`Closures capture variables, not values, so they see the variable's value at call time. That's the cause of the famous "lambdas in a loop all return the last value" trap.`,
+ code:`x = "global"
+def outer():
+    x = "enclosing"
+    def inner():
+        return x            # found in the Enclosing scope
+    return inner
+print(outer()())            # enclosing
+
+def counter():
+    count = 0
+    def inc():
+        nonlocal count      # without this: UnboundLocalError
+        count += 1
+        return count
+    return inc
+
+c = counter()
+c()
+print(c())                  # 2  (state survives between calls)`,
+ wrong:`"Closures copy the variable's value when they're created." They capture the variable and look it up later.`,
+ follow:`Why does <code>[lambda: i for i in range(3)]</code> produce functions that all return 2?`,
+ related:[`nonlocal`,`Decorators`,`Late binding`],
+ points:[`Lookup order Local, Enclosing, Global, Built-in`,`Assignment makes a name local for the whole function`,`global / nonlocal to rebind outer names`,`Closure remembers enclosing variables after outer returns`,`Captures variables (late binding), not values`]},
+
+{id:`py-gil`, topic:`Advanced Python`, tag:`Concurrency`, diff:3, freq:5,
+ q:`What is the GIL? When would you use threads, processes, or asyncio?`,
+ tests:`CPU-bound vs I/O-bound work, and knowing what's a CPython implementation detail.`,
+ hint:`Can two threads run Python bytecode at the same instant in standard CPython? What about while waiting on the network?`,
+ answer:`The Global Interpreter Lock is a CPython mechanism that lets only one thread execute Python bytecode at a time within one interpreter. Threads still help I/O-bound work, because the GIL is released while waiting on I/O. They don't speed up CPU-bound pure-Python code. For CPU-bound work, use multiprocessing (separate processes, each with its own interpreter and GIL) or libraries like NumPy whose C code releases the GIL. asyncio runs many I/O tasks concurrently on a single thread using cooperative <code>await</code> points, which suits large numbers of network connections.`,
+ explain:`The GIL is a CPython detail, not part of the Python language. CPython 3.13 introduced an optional, experimental free-threaded build (PEP 703) that can run without the GIL; standard builds still have it. The GIL doesn't make your code thread-safe: <code>x += 1</code> is several bytecode steps and can still race.`,
+ code:`from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+
+def cpu_task(n):                       # pure computation -> processes
+    return sum(i * i for i in range(n))
+
+def io_task(path):                     # waiting on disk/network -> threads
+    with open(path) as f:
+        return len(f.read())
+
+if __name__ == "__main__":            # required for processes on spawn platforms
+    with ProcessPoolExecutor() as pool:
+        print(list(pool.map(cpu_task, [10**6] * 4)))`,
+ wrong:`"Python can't do concurrency" or "the GIL makes Python code thread-safe." Both are wrong.`,
+ follow:`Is the GIL part of the Python language? Is <code>count += 1</code> atomic across threads?`,
+ related:[`threading`,`multiprocessing`,`asyncio`],
+ points:[`GIL: one thread runs Python bytecode at a time (CPython)`,`Threads help I/O-bound work, GIL released during I/O`,`CPU-bound: multiprocessing or C extensions`,`asyncio: single-thread cooperative concurrency for many I/O tasks`,`CPython detail, free-threaded build experimental in 3.13`,`GIL does not make code thread-safe`]},
+
+{id:`py-mro`, topic:`OOP`, tag:`OOP`, diff:3, freq:4,
+ q:`What is MRO, and how does <code>super()</code> use it?`,
+ tests:`Multiple inheritance, the C3 linearization, and the common misconception that <code>super()</code> means "my parent".`,
+ hint:`In a diamond D(B, C) where both inherit A, where does B's <code>super()</code> go?`,
+ answer:`The Method Resolution Order is the sequence of classes Python searches for an attribute, available as <code>Cls.__mro__</code>. It's computed with C3 linearization: a class comes before its parents, parents keep the order they're listed in, and every class appears exactly once. <code>super()</code> doesn't mean "my parent class". It means "the next class after me in the MRO of the object's actual type". That's why cooperative methods in a diamond each run exactly once.`,
+ explain:`If no consistent order exists (for example <code>X(A, B)</code> and <code>Y(B, A)</code>, then <code>class Z(X, Y)</code>), Python raises <code>TypeError</code> at class creation.`,
+ code:`class A:
+    def hi(self): print("A")
+class B(A):
+    def hi(self):
+        print("B"); super().hi()
+class C(A):
+    def hi(self):
+        print("C"); super().hi()
+class D(B, C):
+    def hi(self):
+        print("D"); super().hi()
+
+D().hi()   # D B C A   (B's super() goes to C, not A!)
+print([k.__name__ for k in D.__mro__])
+# ['D', 'B', 'C', 'A', 'object']`,
+ wrong:`"<code>super()</code> always calls the parent class." It calls the next class in the MRO.`,
+ follow:`When does C3 linearization fail? Why should cooperative methods accept <code>**kwargs</code>?`,
+ related:[`Inheritance`,`Diamond problem`,`super()`],
+ points:[`MRO = attribute search order (__mro__)`,`C3 linearization: child before parents, declared order kept, each class once`,`super() = next class in the MRO of the instance's type`,`Diamond: each method runs once`,`Inconsistent MRO raises TypeError`]},
+
+{id:`py-classmethod`, topic:`OOP`, tag:`OOP`, diff:2, freq:4,
+ q:`What is the difference between <code>@classmethod</code> and <code>@staticmethod</code>?`,
+ tests:`What each receives as its first argument, and the typical use case for each.`,
+ hint:`One receives the class, the other receives nothing extra.`,
+ answer:`An instance method receives the instance (<code>self</code>). A class method receives the class (<code>cls</code>), so it can create instances or read class-level state. It's the standard way to write alternative constructors, and because it uses <code>cls</code> it works correctly for subclasses. A static method receives nothing automatically. It's a plain function placed in the class's namespace because it logically belongs there.`,
+ explain:`Classic example: <code>dict.fromkeys</code> and <code>datetime.fromtimestamp</code> are class methods acting as alternative constructors.`,
+ code:`class Date:
+    def __init__(self, y, m, d):
+        self.y, self.m, self.d = y, m, d
+
+    @classmethod
+    def from_string(cls, s):          # alternative constructor
+        y, m, d = map(int, s.split("-"))
+        return cls(y, m, d)           # cls -> subclasses get subclasses
+
+    @staticmethod
+    def is_valid(s):                  # helper, needs no cls or self
+        return len(s.split("-")) == 3
+
+d = Date.from_string("2026-10-05")
+print(Date.is_valid("2026-10-05"))   # True`,
+ wrong:`"Static methods are for class variables." That's what class methods are for.`,
+ follow:`Why use <code>cls(...)</code> instead of <code>Date(...)</code> inside the class method?`,
+ related:[`Alternative constructors`,`Inheritance`],
+ points:[`classmethod receives cls`,`Used for alternative constructors / class state`,`Works with subclasses via cls`,`staticmethod receives nothing implicit`,`staticmethod = namespaced helper function`]},
+
+{id:`py-context`, topic:`Context Managers`, tag:`Context managers`, diff:2, freq:4,
+ q:`What is a context manager? How does <code>with</code> work?`,
+ tests:`Guaranteed cleanup, the protocol methods, and <code>contextlib</code>.`,
+ hint:`Which two dunder methods does <code>with</code> call, and when?`,
+ answer:`A context manager is an object that defines setup and teardown around a block of code. <code>with</code> calls <code>__enter__</code> (its return value is bound by <code>as</code>), runs the block, then always calls <code>__exit__(exc_type, exc, tb)</code>, even if the block raised an exception. If <code>__exit__</code> returns True, the exception is suppressed. Typical uses are files, locks, database transactions and temporary state. <code>contextlib.contextmanager</code> lets you write one as a generator: code before <code>yield</code> is setup, code after is teardown.`,
+ explain:`Behind the scenes <code>with</code> is equivalent to a <code>try/finally</code>, but reusable and harder to get wrong.`,
+ code:`with open("data.txt", "w") as f:   # __enter__ returns the file
+    f.write("hi")
+# __exit__ has run: file closed, even on error
+
+from contextlib import contextmanager
+import time
+
+@contextmanager
+def timed(label):
+    start = time.perf_counter()
+    try:
+        yield                       # the with-block runs here
+    finally:
+        print(label, time.perf_counter() - start)
+
+with timed("work"):
+    sum(range(10**6))`,
+ wrong:`"<code>with</code> is only for files."`,
+ follow:`How would you ignore one specific exception? (<code>contextlib.suppress</code>)`,
+ related:[`try/finally`,`contextlib`,`Generators`],
+ points:[`Setup/teardown around a block`,`__enter__ then block then __exit__ always`,`__exit__ returning True suppresses the exception`,`Uses: files, locks, transactions`,`contextlib.contextmanager generator form`]},
+
+{id:`py-iter`, topic:`Iterators & Generators`, tag:`Iterators`, diff:2, freq:4,
+ q:`What is the difference between an iterable and an iterator?`,
+ tests:`The iteration protocol and what a <code>for</code> loop really does.`,
+ hint:`A list can be looped over many times. Can <code>iter(list)</code>?`,
+ answer:`An iterable is anything you can get an iterator from: it implements <code>__iter__</code> (lists, strings, dicts, files). An iterator is the object that produces values one at a time with <code>__next__</code>, raising <code>StopIteration</code> when done. Its <code>__iter__</code> returns itself. Iterables can usually be looped over many times; an iterator is single-pass and exhausted once consumed. A <code>for</code> loop calls <code>iter()</code> once, then <code>next()</code> repeatedly until <code>StopIteration</code>.`,
+ explain:`Every generator is an iterator. <code>zip</code>, <code>map</code>, <code>filter</code> and <code>enumerate</code> return iterators, which is why they appear "empty" the second time you use them.`,
+ code:`nums = [1, 2, 3]          # iterable
+it = iter(nums)           # iterator
+print(next(it), next(it)) # 1 2
+print(list(it))           # [3]
+print(list(it))           # []  <- exhausted
+
+# What a for loop does:
+it = iter(nums)
+while True:
+    try:
+        x = next(it)
+    except StopIteration:
+        break
+    print(x)`,
+ wrong:`"They're the same thing." A list is iterable but not an iterator: <code>next([1, 2])</code> raises <code>TypeError</code>.`,
+ follow:`Why does <code>z = zip(a, b); list(z); list(z)</code> return an empty list the second time?`,
+ related:[`Generators`,`for loops`,`itertools`],
+ points:[`Iterable implements __iter__`,`Iterator implements __next__ (and __iter__ returning self)`,`StopIteration ends iteration`,`Iterators are single-pass`,`for calls iter() then next() repeatedly`]},
+
+{id:`py-pass-by`, topic:`Functions`, tag:`Mutability`, diff:2, freq:5,
+ q:`Is Python pass-by-value or pass-by-reference?`,
+ tests:`Whether you can explain mutation vs rebinding precisely.`,
+ hint:`Inside a function, compare <code>lst.append(4)</code> with <code>lst = [99]</code>.`,
+ answer:`Neither, in the C++ sense. Python passes references to objects, often called "pass by object reference" or "call by sharing". The parameter name is bound to the same object the caller passed. If the function mutates that object (for example <code>append</code>), the caller sees the change. If the function rebinds the parameter name (<code>lst = [99]</code>), only the local name changes and the caller is unaffected. Immutable objects like ints and strings can't be mutated, so they behave as if passed by value.`,
+ explain:`Assignment in Python never copies data; it binds a name to an object. Function parameters are just assignment.`,
+ code:`def modify(lst):
+    lst.append(4)      # mutates the shared object -> caller sees it
+
+def rebind(lst):
+    lst = [99]         # rebinds the local name -> caller doesn't
+
+a = [1, 2, 3]
+modify(a)
+rebind(a)
+print(a)   # [1, 2, 3, 4]`,
+ wrong:`"Lists are passed by reference and ints by value." Every argument is passed the same way; ints just can't be mutated.`,
+ follow:`How would you make a function that doesn't modify the caller's list?`,
+ related:[`References`,`Mutability`,`Copying`],
+ points:[`Pass by object reference / call by sharing`,`Parameter bound to the same object`,`Mutation visible to caller`,`Rebinding not visible`,`Immutables can't be mutated`]},
+
+{id:`py-str-repr`, topic:`OOP`, tag:`OOP`, diff:1, freq:3,
+ q:`What is the difference between <code>__str__</code> and <code>__repr__</code>?`,
+ tests:`Dunder methods and audience: users vs developers.`,
+ hint:`Which one do you see when an object is inside a list?`,
+ answer:`<code>__repr__</code> gives an unambiguous representation for developers, ideally one that looks like valid code to recreate the object. It's used by the REPL, debuggers and containers. <code>__str__</code> gives a readable representation for end users and is used by <code>print()</code> and <code>str()</code>. If <code>__str__</code> isn't defined, Python falls back to <code>__repr__</code>, so if you implement only one, implement <code>__repr__</code>.`,
+ explain:`f-strings call <code>__str__</code> by default; <code>f"{x!r}"</code> forces <code>__repr__</code>.`,
+ code:`class Point:
+    def __init__(self, x, y):
+        self.x, self.y = x, y
+    def __repr__(self):
+        return f"Point(x={self.x}, y={self.y})"
+    def __str__(self):
+        return f"({self.x}, {self.y})"
+
+p = Point(1, 2)
+print(p)      # (1, 2)                <- __str__
+print([p])    # [Point(x=1, y=2)]     <- containers use __repr__
+print(f"{p!r}")  # Point(x=1, y=2)`,
+ wrong:`"They're interchangeable."`,
+ follow:`Which one does a dataclass generate for you?`,
+ related:[`Dunder methods`,`dataclasses`],
+ points:[`__repr__ unambiguous, for developers`,`__str__ readable, for users`,`print/str use __str__, containers/REPL use __repr__`,`__str__ falls back to __repr__`]},
+
+{id:`py-comp-gen`, topic:`Lists`, tag:`Generators`, diff:2, freq:4,
+ q:`List comprehension vs generator expression: what's the difference?`,
+ tests:`Eager vs lazy evaluation and memory awareness.`,
+ hint:`Square brackets vs parentheses. What gets built in memory?`,
+ answer:`A list comprehension <code>[...]</code> builds the entire list in memory immediately, which you can index and iterate many times. A generator expression <code>(...)</code> produces items lazily, one at a time, using constant memory, but it can only be iterated once and can't be indexed. Use a generator expression when you consume the values once, especially when passing them to <code>sum</code>, <code>any</code>, <code>max</code> or <code>"".join</code>.`,
+ explain:`When a generator expression is the only argument to a function, you can drop the extra parentheses: <code>sum(x * x for x in nums)</code>.`,
+ code:`import sys
+lst = [x * x for x in range(1_000_000)]
+gen = (x * x for x in range(1_000_000))
+print(sys.getsizeof(lst))   # about 8 MB (CPython, 64-bit)
+print(sys.getsizeof(gen))   # a couple of hundred bytes
+
+print(sum(x * x for x in range(10)))   # 285
+print(any(n > 5 for n in [1, 9, 3]))   # True, stops at 9`,
+ wrong:`"Generator expressions are always faster." They save memory; for small data a list can be as fast or faster.`,
+ follow:`Why can <code>any(...)</code> with a generator stop early?`,
+ related:[`Generators`,`Lazy evaluation`,`Comprehensions`],
+ points:[`List comprehension eager, builds full list`,`Generator expression lazy, O(1) memory`,`Generator single-pass, not indexable`,`Prefer generators for one-pass aggregation`]},
+
+{id:`py-call`, topic:`Python Internals`, tag:`Internals`, diff:3, freq:3,
+ q:`What happens when a Python function is called?`,
+ tests:`The execution model: frames, the call stack, and bytecode.`,
+ hint:`Think about what object stores a call's local variables, and where it goes.`,
+ answer:`The arguments are evaluated left to right. Python creates a new frame object holding that call's local variables, with the parameters bound to the argument objects. The frame is pushed onto the call stack and the function's bytecode runs in the interpreter loop. On <code>return</code> (or the end of the body, which returns <code>None</code>), the value is handed back to the caller and the frame is popped. Its locals are freed once nothing references them, unless a closure captured them. Each call gets its own frame, which is what makes recursion work, and CPython limits stack depth (<code>sys.getrecursionlimit()</code>, default 1000).`,
+ explain:`CPython first compiles source code to bytecode (cached in <code>.pyc</code> files), and the interpreter executes that bytecode. The <code>dis</code> module shows it. Exact opcode names change between CPython versions, so treat them as an implementation detail.`,
+ code:`import dis
+
+def add(a, b):
+    return a + b
+
+dis.dis(add)
+# Roughly: LOAD_FAST a, LOAD_FAST b, BINARY_OP (+), RETURN_VALUE
+# (opcode names vary between CPython versions)
+
+import sys
+print(sys.getrecursionlimit())   # 1000 by default`,
+ wrong:`"Python interprets the source line by line." CPython compiles to bytecode first.`,
+ follow:`Why does deep recursion raise <code>RecursionError</code>? Does Python do tail-call optimisation? (No.)`,
+ related:[`Call stack`,`Recursion`,`Bytecode`],
+ points:[`Arguments evaluated left to right`,`New frame with its own locals`,`Frame pushed on the call stack`,`Bytecode executed`,`Return value passed back, frame popped`,`Recursion limit, no tail-call optimisation`]},
+
+{id:`py-exceptions`, topic:`Exception Handling`, tag:`Exceptions`, diff:1, freq:4,
+ q:`Explain <code>try</code>, <code>except</code>, <code>else</code> and <code>finally</code>.`,
+ tests:`Control flow through exception handlers, and good practice.`,
+ hint:`Which block runs only when nothing went wrong? Which runs no matter what?`,
+ answer:`<code>try</code> holds code that might raise. <code>except</code> clauses are checked in order, and the first matching one handles the exception, so put specific exceptions before general ones. <code>else</code> runs only if the <code>try</code> block raised nothing; it's the place for code that should run on success but whose own errors you don't want to catch. <code>finally</code> always runs, whether there was an exception, a <code>return</code>, or a <code>break</code>, and it's used for cleanup.`,
+ explain:`Good practice: catch the narrowest exception you can, never use a bare <code>except:</code> (it also catches <code>KeyboardInterrupt</code> and <code>SystemExit</code>), and use <code>raise ... from err</code> to chain exceptions.`,
+ code:`def parse(s):
+    try:
+        n = int(s)
+    except ValueError as e:
+        print("bad input:", e)
+        return None
+    else:
+        print("parsed OK")   # only if no exception
+        return n
+    finally:
+        print("cleanup")     # always, even after return
+
+parse("42")   # parsed OK, cleanup
+parse("x")    # bad input: ..., cleanup`,
+ wrong:`"<code>else</code> runs when an exception happens."`,
+ follow:`Why is a bare <code>except:</code> dangerous? How do you define a custom exception?`,
+ related:[`Exception hierarchy`,`Context managers`],
+ points:[`try holds risky code`,`except checked in order, first match wins`,`else runs only on success`,`finally always runs`,`Catch specific exceptions, avoid bare except`]}
+];
+
+// ===== DSA MOST-ASKED PROBLEMS =====
+const DSA = [
+{id:`dsa-two-sum`, title:`Two Sum`, pattern:`hashing`, diff:1, freq:5,
+ prompt:`Given an array <code>nums</code> and an integer <code>target</code>, return the indices of the two numbers that add up to <code>target</code>. Exactly one solution exists, and you may not use the same element twice.`,
+ recognize:`"Find a pair that sums to X" in an <em>unsorted</em> array: remember what you've seen in a hash map. If the array were sorted, two pointers would work with O(1) space.`,
+ testing:`Trading space for time, and handling the "same element twice" edge case.`,
+ brute:`Check every pair with two nested loops: O(n²) time, O(1) space.`,
+ code:`def two_sum(nums, target):
+    seen = {}                       # value -> index
+    for i, x in enumerate(nums):
+        need = target - x
+        if need in seen:
+            return [seen[need], i]
+        seen[x] = i                 # store AFTER checking
+    return []`,
+ time:`O(n)`, space:`O(n)`,
+ dry:`nums = [2, 7, 11, 15], target = 9
+i=0, x=2: need 7, not seen, seen = {2: 0}
+i=1, x=7: need 2, found at index 0, return [0, 1]`,
+ mistakes:`Storing <code>x</code> before checking makes <code>[3]</code> with target 6 "find" index 0 twice. Sorting first destroys the original indices.`,
+ follow:`What if the array is sorted? Return all unique pairs? Extend it to 3Sum.`},
+
+{id:`dsa-parens`, title:`Valid Parentheses`, pattern:`stack`, diff:1, freq:5,
+ prompt:`Given a string containing only <code>()[]{}</code>, decide whether every bracket is closed by the same type in the correct order.`,
+ recognize:`Matching pairs with nesting, where the most recent opener must close first: last in, first out, so a stack.`,
+ testing:`Stack usage and edge cases: a closer with an empty stack, and leftover openers.`,
+ brute:`Repeatedly delete "()", "[]" and "{}" until nothing changes: O(n²).`,
+ code:`def is_valid(s):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    for ch in s:
+        if ch in pairs:                       # a closing bracket
+            if not stack or stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+        else:                                 # an opening bracket
+            stack.append(ch)
+    return not stack          # leftovers mean unclosed brackets`,
+ time:`O(n)`, space:`O(n)`,
+ dry:`s = "([)]"
+"(" push, stack = ["("]
+"[" push, stack = ["(", "["]
+")" top is "[" but need "(", return False`,
+ mistakes:`Not checking for an empty stack before reading <code>stack[-1]</code>. Returning True at the end without checking that the stack is empty ("((" is invalid).`,
+ follow:`Find the minimum number of insertions to make it valid. Find the longest valid substring.`},
+
+{id:`dsa-stock`, title:`Best Time to Buy and Sell Stock`, pattern:`greedy`, diff:1, freq:5,
+ prompt:`<code>prices[i]</code> is a stock price on day i. Choose one day to buy and a later day to sell to maximise profit. Return 0 if no profit is possible.`,
+ recognize:`"Best pair where the first comes before the second": track the best value seen so far in a single pass.`,
+ testing:`Whether you can reduce O(n²) pair-checking to one pass by keeping a running minimum.`,
+ brute:`Try every buy/sell pair: O(n²).`,
+ code:`def max_profit(prices):
+    best, lowest = 0, float("inf")
+    for p in prices:
+        lowest = min(lowest, p)        # cheapest buy so far
+        best = max(best, p - lowest)   # what if we sell today?
+    return best`,
+ time:`O(n)`, space:`O(1)`,
+ dry:`prices = [7, 1, 5, 3, 6, 4]
+lowest: 7 -> 1 (day 1)
+profits if selling: 5-1=4, 3-1=2, 6-1=5 (best), 4-1=3
+answer: 5`,
+ mistakes:`Buying at the global minimum and selling at the global maximum: the maximum might come <em>before</em> the minimum.`,
+ follow:`Unlimited transactions? At most two? With a cooldown day? (Those become DP.)`},
+
+{id:`dsa-longest-substring`, title:`Longest Substring Without Repeating Characters`, pattern:`sliding-window`, diff:2, freq:5,
+ prompt:`Given a string <code>s</code>, return the length of the longest substring with no repeated characters.`,
+ recognize:`"Longest contiguous substring that satisfies a condition": a variable-size sliding window.`,
+ testing:`Window invariants, and moving the left pointer correctly.`,
+ brute:`Check every substring for uniqueness: O(n³), or O(n²) with a set.`,
+ code:`def length_of_longest_substring(s):
+    last = {}                    # char -> last index seen
+    left = best = 0
+    for right, ch in enumerate(s):
+        if ch in last and last[ch] >= left:
+            left = last[ch] + 1          # jump past the duplicate
+        last[ch] = right
+        best = max(best, right - left + 1)
+    return best`,
+ time:`O(n)`, space:`O(min(n, alphabet))`,
+ dry:`s = "abba"
+r=0 'a': window "a", best 1
+r=1 'b': window "ab", best 2
+r=2 'b': duplicate at 1, left = 2, window "b"
+r=3 'a': 'a' last seen at 0, which is before left -> ignore, window "ba", best 2`,
+ mistakes:`Dropping the <code>last[ch] >= left</code> check makes <code>left</code> jump <em>backwards</em> on inputs like "abba".`,
+ follow:`At most k distinct characters? Minimum window substring containing all characters of t?`},
+
+{id:`dsa-kadane`, title:`Maximum Subarray (Kadane's algorithm)`, pattern:`dp`, diff:2, freq:5,
+ prompt:`Find the contiguous subarray with the largest sum and return that sum.`,
+ recognize:`"Best contiguous subarray": at each index, decide whether to extend the current run or start fresh.`,
+ testing:`A tiny piece of DP thinking: the best subarray ending here depends only on the best ending one step earlier.`,
+ brute:`Sum every subarray: O(n²) with running sums.`,
+ code:`def max_subarray(nums):
+    best = cur = nums[0]
+    for x in nums[1:]:
+        cur = max(x, cur + x)      # extend the run, or start at x
+        best = max(best, cur)
+    return best`,
+ time:`O(n)`, space:`O(1)`,
+ dry:`nums = [-2, 1, -3, 4, -1, 2, 1, -5, 4]
+cur: -2, 1, -2, 4, 3, 5, 6, 1, 5
+best: 6  (subarray [4, -1, 2, 1])`,
+ mistakes:`Initialising <code>best = 0</code> returns 0 for an all-negative array instead of the largest element.`,
+ follow:`Return the subarray itself. Maximum product subarray (track both min and max).`},
+
+{id:`dsa-subarray-k`, title:`Subarray Sum Equals K`, pattern:`prefix-sum`, diff:2, freq:5,
+ prompt:`Count the contiguous subarrays whose sum equals <code>k</code>. The array may contain negative numbers.`,
+ recognize:`"Count subarrays with sum k" plus negative numbers: sliding window breaks, so use prefix sums with a hash map.`,
+ testing:`The prefix-sum identity sum(i..j) = P[j] − P[i−1], and why negatives rule out a sliding window.`,
+ brute:`Try every start and extend: O(n²).`,
+ code:`from collections import defaultdict
+
+def subarray_sum(nums, k):
+    count = defaultdict(int)
+    count[0] = 1             # empty prefix: subarrays starting at index 0
+    prefix = total = 0
+    for x in nums:
+        prefix += x
+        total += count[prefix - k]   # earlier prefixes P with prefix - P == k
+        count[prefix] += 1
+    return total`,
+ time:`O(n)`, space:`O(n)`,
+ dry:`nums = [1, 1, 1], k = 2
+prefix 1: need -1, none.  counts {0:1, 1:1}
+prefix 2: need 0, one.    total 1
+prefix 3: need 1, one.    total 2`,
+ mistakes:`Forgetting <code>count[0] = 1</code> misses subarrays that start at index 0. Trying a sliding window fails when values can be negative.`,
+ follow:`Longest subarray with sum k? Count subarrays whose sum is divisible by k?`},
+
+{id:`dsa-reverse-ll`, title:`Reverse a Linked List`, pattern:`linked-list`, diff:1, freq:5,
+ prompt:`Reverse a singly linked list and return the new head.`,
+ recognize:`Pointer manipulation: walk the list once, flipping each <code>next</code> pointer.`,
+ testing:`Careful pointer handling without losing the rest of the list.`,
+ brute:`Copy the values into a list, then rebuild: O(n) extra space.`,
+ code:`class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val, self.next = val, next
+
+def reverse_list(head):
+    prev, cur = None, head
+    while cur:
+        nxt = cur.next        # save it before overwriting
+        cur.next = prev       # flip the pointer
+        prev, cur = cur, nxt
+    return prev               # the old tail is the new head`,
+ time:`O(n)`, space:`O(1)`,
+ dry:`1 -> 2 -> 3 -> None
+step 1: None <- 1   2 -> 3
+step 2: None <- 1 <- 2   3
+step 3: None <- 1 <- 2 <- 3   return 3`,
+ mistakes:`Overwriting <code>cur.next</code> before saving it, which loses the rest of the list. Returning <code>cur</code> (which is None) instead of <code>prev</code>.`,
+ follow:`Write it recursively (O(n) stack space). Reverse in groups of k. Reverse between positions m and n.`},
+
+{id:`dsa-cycle`, title:`Linked List Cycle`, pattern:`fast-slow`, diff:1, freq:5,
+ prompt:`Determine whether a linked list contains a cycle, using O(1) extra space.`,
+ recognize:`Cycle detection or "find the middle" in a linked list: fast and slow pointers.`,
+ testing:`Floyd's algorithm, and comparing nodes by identity.`,
+ brute:`Store visited nodes in a set: O(n) space.`,
+ code:`def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:       # same node object, not equal values
+            return True
+    return False`,
+ time:`O(n)`, space:`O(1)`,
+ dry:`If there's a cycle, fast gains one step on slow every iteration inside it, so it must land on slow.
+Without a cycle, fast reaches None first.`,
+ mistakes:`Checking <code>fast.next.next</code> without first checking <code>fast.next</code>. Comparing <code>.val</code> instead of node identity.`,
+ follow:`Find the node where the cycle starts: after they meet, reset one pointer to head and move both one step at a time.`},
+
+{id:`dsa-search-range`, title:`First and Last Position in a Sorted Array`, pattern:`binary-search`, diff:2, freq:4,
+ prompt:`Given a sorted array, return the first and last index of <code>target</code>, or <code>[-1, -1]</code>, in O(log n).`,
+ recognize:`Sorted input plus "first/last position" or "insertion point": a lower-bound binary search.`,
+ testing:`Off-by-one discipline with a half-open interval [lo, hi).`,
+ brute:`Linear scan: O(n).`,
+ code:`def lower_bound(nums, target):
+    lo, hi = 0, len(nums)            # search in [lo, hi)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if nums[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo                        # first index with nums[i] >= target
+
+def search_range(nums, target):
+    left = lower_bound(nums, target)
+    if left == len(nums) or nums[left] != target:
+        return [-1, -1]
+    right = lower_bound(nums, target + 1) - 1   # integers only
+    return [left, right]
+
+# Standard library: bisect.bisect_left / bisect.bisect_right`,
+ time:`O(log n)`, space:`O(1)`,
+ dry:`nums = [5, 7, 7, 8, 8, 10], target = 8
+lower_bound(8) = 3
+lower_bound(9) = 5, so right = 4
+answer: [3, 4]`,
+ mistakes:`Mixing closed [lo, hi] and half-open [lo, hi) conventions causes infinite loops. Stopping at the first match finds <em>a</em> position, not the first.`,
+ follow:`Search in a rotated sorted array. Find the minimum feasible value (binary search on the answer).`},
+
+{id:`dsa-merge-intervals`, title:`Merge Intervals`, pattern:`greedy`, diff:2, freq:5,
+ prompt:`Given a list of intervals <code>[start, end]</code>, merge all overlapping intervals.`,
+ recognize:`Intervals that overlap, schedule or conflict: sort by start, then sweep.`,
+ testing:`Sorting as a preprocessing step, and handling nested intervals.`,
+ brute:`Compare every pair repeatedly until nothing merges: O(n²) or worse.`,
+ code:`def merge(intervals):
+    intervals.sort(key=lambda iv: iv[0])
+    merged = []
+    for start, end in intervals:
+        if merged and start <= merged[-1][1]:        # overlaps the last one
+            merged[-1][1] = max(merged[-1][1], end)
+        else:
+            merged.append([start, end])
+    return merged`,
+ time:`O(n log n)`, space:`O(n) for the output`,
+ dry:`[[1,3],[2,6],[8,10],[15,18]]
+[1,3] + [2,6] overlap -> [1,6]
+[8,10] no overlap, [15,18] no overlap
+answer: [[1,6],[8,10],[15,18]]`,
+ mistakes:`Writing <code>merged[-1][1] = end</code> without <code>max</code> breaks nested intervals such as [1,10] and [2,3].`,
+ follow:`Insert a new interval. Minimum number of meeting rooms (heap or sweep line).`},
+
+{id:`dsa-topk`, title:`Top K Frequent Elements`, pattern:`heap`, diff:2, freq:5,
+ prompt:`Return the <code>k</code> most frequent elements of <code>nums</code>.`,
+ recognize:`"Top k", "k largest", "k most frequent": a heap of size k, or bucket sort when counts are bounded.`,
+ testing:`Counter plus heapq fluency, and the O(n log k) vs O(n) trade-off.`,
+ brute:`Count, then sort all items by count: O(n log n).`,
+ code:`from collections import Counter
+import heapq
+
+def top_k_frequent(nums, k):              # O(n log k)
+    freq = Counter(nums)
+    return heapq.nlargest(k, freq, key=freq.get)
+
+def top_k_bucket(nums, k):                # O(n)
+    freq = Counter(nums)
+    buckets = [[] for _ in range(len(nums) + 1)]
+    for num, c in freq.items():
+        buckets[c].append(num)            # index = frequency
+    out = []
+    for c in range(len(buckets) - 1, 0, -1):
+        for num in buckets[c]:
+            out.append(num)
+            if len(out) == k:
+                return out
+    return out`,
+ time:`O(n log k) heap, O(n) bucket`, space:`O(n)`,
+ dry:`nums = [1,1,1,2,2,3], k = 2
+freq = {1:3, 2:2, 3:1}
+buckets[3] = [1], buckets[2] = [2]
+answer: [1, 2]`,
+ mistakes:`Forgetting that <code>heapq</code> is a min-heap. Sorting everything when k is much smaller than n.`,
+ follow:`Kth largest element (quickselect, average O(n)). Top k from a stream.`},
+
+{id:`dsa-islands`, title:`Number of Islands`, pattern:`bfs`, diff:2, freq:5,
+ prompt:`Given a grid of "1" (land) and "0" (water), count the islands. Land connects horizontally and vertically.`,
+ recognize:`Counting connected regions in a grid: start a BFS or DFS from each unvisited land cell.`,
+ testing:`Grid traversal, visited marking, and bounds checks.`,
+ brute:`This is already the natural approach; the "brute force" mistake is revisiting cells without marking them.`,
+ code:`from collections import deque
+
+def num_islands(grid):
+    if not grid:
+        return 0
+    rows, cols = len(grid), len(grid[0])
+    islands = 0
+    for r in range(rows):
+        for c in range(cols):
+            if grid[r][c] != "1":
+                continue
+            islands += 1
+            grid[r][c] = "0"                  # mark when enqueuing
+            queue = deque([(r, c)])
+            while queue:
+                cr, cc = queue.popleft()
+                for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
+                    nr, nc = cr + dr, cc + dc
+                    if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == "1":
+                        grid[nr][nc] = "0"
+                        queue.append((nr, nc))
+    return islands`,
+ time:`O(rows × cols)`, space:`O(rows × cols) worst-case queue`,
+ dry:`Each land cell is enqueued exactly once and then turned to "0".
+Each BFS start is one new island.`,
+ mistakes:`Marking cells when dequeued instead of enqueued adds duplicates to the queue. Recursive DFS can hit Python's recursion limit on large grids. Mutating the input: ask the interviewer whether that's allowed.`,
+ follow:`Max area of an island. Count distinct island shapes. Islands with diagonal connections.`},
+
+{id:`dsa-temps`, title:`Daily Temperatures`, pattern:`monotonic-stack`, diff:2, freq:4,
+ prompt:`For each day, return how many days you'd wait for a warmer temperature, or 0 if none comes.`,
+ recognize:`"Next greater element" for every position: a monotonic stack.`,
+ testing:`Whether you see that each index is pushed and popped once, so the total is O(n).`,
+ brute:`For each day, scan forward: O(n²).`,
+ code:`def daily_temperatures(temps):
+    answer = [0] * len(temps)
+    stack = []                      # indices still waiting; temps decreasing
+    for i, t in enumerate(temps):
+        while stack and temps[stack[-1]] < t:
+            j = stack.pop()
+            answer[j] = i - j       # day j found its warmer day
+        stack.append(i)
+    return answer`,
+ time:`O(n)`, space:`O(n)`,
+ dry:`temps = [73, 74, 75, 71, 69, 72, 76, 73]
+answer = [1, 1, 4, 2, 1, 1, 0, 0]`,
+ mistakes:`Pushing temperatures instead of indices (you need the distance). Calling the nested loop O(n²); it's amortized O(n).`,
+ follow:`Next greater element in a circular array. Largest rectangle in a histogram.`},
+
+{id:`dsa-level-order`, title:`Binary Tree Level Order Traversal`, pattern:`bfs`, diff:2, freq:5,
+ prompt:`Return a binary tree's node values level by level, as a list of lists.`,
+ recognize:`"Level by level", "minimum depth", "nodes at distance k": BFS with a queue.`,
+ testing:`BFS on trees and the level-size trick.`,
+ brute:`DFS while passing the depth also works, at O(n).`,
+ code:`from collections import deque
+
+def level_order(root):
+    if not root:
+        return []
+    levels, queue = [], deque([root])
+    while queue:
+        level = []
+        for _ in range(len(queue)):        # exactly one level per pass
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        levels.append(level)
+    return levels`,
+ time:`O(n)`, space:`O(width of the tree)`,
+ dry:`    3
+   / \\
+  9  20
+     / \\
+    15  7
+-> [[3], [9, 20], [15, 7]]`,
+ mistakes:`Using <code>list.pop(0)</code> (O(n)) instead of <code>deque.popleft()</code>. Reading <code>len(queue)</code> inside the loop condition while the queue grows.`,
+ follow:`Zigzag traversal. Right side view. Average of each level.`},
+
+{id:`dsa-coin-change`, title:`Coin Change (minimum coins)`, pattern:`dp`, diff:2, freq:5,
+ prompt:`Given coin values and an amount, return the fewest coins needed to make the amount, or -1 if it's impossible. Each coin can be used any number of times.`,
+ recognize:`"Minimum number of …" with repeated choices and overlapping subproblems: DP. Greedy fails here.`,
+ testing:`Defining a DP state and transition, and knowing why greedy is wrong.`,
+ brute:`Recursively try every coin at every step: exponential time.`,
+ code:`def coin_change(coins, amount):
+    INF = amount + 1
+    dp = [0] + [INF] * amount        # dp[a] = fewest coins to make a
+    for a in range(1, amount + 1):
+        for c in coins:
+            if c <= a:
+                dp[a] = min(dp[a], dp[a - c] + 1)
+    return dp[amount] if dp[amount] != INF else -1`,
+ time:`O(amount × len(coins))`, space:`O(amount)`,
+ dry:`coins = [1, 3, 4], amount = 6
+greedy: 4 + 1 + 1 = 3 coins (wrong)
+dp: dp[3] = 1, dp[6] = dp[3] + 1 = 2  (3 + 3)`,
+ mistakes:`Using greedy (largest coin first). Initialising with <code>float("inf")</code> works but mixes types; <code>amount + 1</code> is a safe sentinel.`,
+ follow:`Count the number of ways to make the amount (order matters vs doesn't: which loop goes outside?).`},
+
+{id:`dsa-subsets`, title:`Subsets`, pattern:`backtracking`, diff:2, freq:4,
+ prompt:`Given distinct integers, return all possible subsets (the power set).`,
+ recognize:`"Return all combinations / subsets / permutations": backtracking (choose, explore, un-choose).`,
+ testing:`The backtracking template and copying the path correctly.`,
+ brute:`Iterate over bitmasks 0 to 2ⁿ−1, which is also a valid answer.`,
+ code:`def subsets(nums):
+    result, path = [], []
+    def backtrack(start):
+        result.append(path[:])          # copy! path keeps changing
+        for i in range(start, len(nums)):
+            path.append(nums[i])        # choose
+            backtrack(i + 1)            # explore
+            path.pop()                  # un-choose
+    backtrack(0)
+    return result`,
+ time:`O(n · 2ⁿ)`, space:`O(n) recursion, excluding output`,
+ dry:`nums = [1, 2, 3]
+[] -> [1] -> [1,2] -> [1,2,3] -> back -> [1,3] -> back -> [2] -> [2,3] -> [3]`,
+ mistakes:`<code>result.append(path)</code> without a copy leaves every entry pointing to the same (finally empty) list.`,
+ follow:`Subsets with duplicates (sort, then skip equal neighbours). Permutations. Combination sum.`}
+];
+
+// ===== PATTERNS =====
+const PATTERNS = [
+{id:`two-pointers`, name:`Two pointers`, signals:[`sorted array`,`find a pair or triplet`,`in-place removal`,`palindrome check`,`reverse`],
+ idea:`Two indices move toward each other, or in the same direction, so each step discards part of the search space. Turns many O(n²) pair searches into O(n).`,
+ code:`def pair_with_sum(arr, target):      # arr is sorted
+    l, r = 0, len(arr) - 1
+    while l < r:
+        s = arr[l] + arr[r]
+        if s == target:
+            return l, r
+        if s < target:
+            l += 1          # need a bigger sum
+        else:
+            r -= 1          # need a smaller sum
+    return None`,
+ cx:`O(n) time, O(1) space`, problems:[`Two Sum II (sorted)`,`3Sum`,`Container With Most Water`,`Valid Palindrome`],
+ pitfall:`Only valid when moving a pointer provably can't skip an answer, usually because the input is sorted.`},
+{id:`sliding-window`, name:`Sliding window`, signals:[`contiguous subarray or substring`,`longest / shortest`,`at most k`,`window of size k`],
+ idea:`Keep a window [left, right] and its state (sum, counts). Expand right; shrink left while the window is invalid. Each element enters and leaves once.`,
+ code:`def longest_valid_window(arr, k):
+    left = best = 0
+    window_sum = 0
+    for right, x in enumerate(arr):
+        window_sum += x                 # 1. add arr[right]
+        while window_sum > k:           # 2. shrink while invalid
+            window_sum -= arr[left]
+            left += 1
+        best = max(best, right - left + 1)
+    return best   # longest window with sum <= k (non-negative values)`,
+ cx:`O(n) time`, problems:[`Longest Substring Without Repeating Characters`,`Minimum Window Substring`,`Max Sum Subarray of Size K`,`Permutation in String`],
+ pitfall:`Shrinking assumes that adding elements never makes an invalid window valid. That fails with negative numbers; use prefix sums instead.`},
+{id:`fast-slow`, name:`Fast & slow pointers`, signals:[`linked list cycle`,`middle of a list`,`cycle in a number sequence`],
+ idea:`One pointer moves twice as fast. In a cycle they must meet; in a straight list, the slow one ends at the middle.`,
+ code:`def middle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow     # second middle for even length`,
+ cx:`O(n) time, O(1) space`, problems:[`Linked List Cycle`,`Middle of the Linked List`,`Happy Number`,`Find the Duplicate Number`],
+ pitfall:`Check <code>fast and fast.next</code> before stepping twice.`},
+{id:`prefix-sum`, name:`Prefix sum`, signals:[`many range-sum queries`,`subarray sum equals k`,`negative numbers present`],
+ idea:`P[i] = sum of the first i elements, so any range sum is P[j] − P[i]. Combine with a hash map to count matching ranges.`,
+ code:`from itertools import accumulate
+nums = [3, 1, 4, 1, 5]
+P = [0, *accumulate(nums)]       # [0, 3, 4, 8, 9, 14]
+def range_sum(i, j):             # sum of nums[i..j] inclusive
+    return P[j + 1] - P[i]`,
+ cx:`O(n) build, O(1) per query`, problems:[`Subarray Sum Equals K`,`Range Sum Query`,`Contiguous Array`,`Product of Array Except Self`],
+ pitfall:`Off-by-one: use the leading 0 so P has n + 1 entries.`},
+{id:`hashing`, name:`Hashing`, signals:[`seen before?`,`count frequencies`,`group by a key`,`need O(1) lookups`],
+ idea:`Trade memory for speed: a dict or set answers "have I seen this?" in O(1) average time.`,
+ code:`from collections import Counter, defaultdict
+
+def group_anagrams(words):
+    groups = defaultdict(list)
+    for w in words:
+        groups[tuple(sorted(w))].append(w)   # same letters -> same key
+    return list(groups.values())
+
+print(Counter("banana").most_common(1))      # [('a', 3)]`,
+ cx:`O(n) average`, problems:[`Two Sum`,`Group Anagrams`,`Longest Consecutive Sequence`,`Contains Duplicate`],
+ pitfall:`Keys must be hashable; convert lists to tuples first.`},
+{id:`binary-search`, name:`Binary search`, signals:[`sorted input`,`find first / last`,`minimum x such that…`,`answer is monotonic`],
+ idea:`Halve the search space each step. Also works on the <em>answer</em>: if feasible(x) goes False…False True…True, search for the first True.`,
+ code:`def first_true(lo, hi, ok):     # ok(x) is monotonic: F F F T T
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if ok(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo`,
+ cx:`O(log n)`, problems:[`Search in Rotated Sorted Array`,`Koko Eating Bananas`,`Find Peak Element`,`Median of Two Sorted Arrays`],
+ pitfall:`Pick one convention ([lo, hi) here) and stick to it. Python ints don't overflow, so <code>(lo + hi) // 2</code> is fine.`},
+{id:`stack`, name:`Stack`, signals:[`matching pairs`,`nested structure`,`undo / backtrack the most recent`,`evaluate an expression`],
+ idea:`Last in, first out: the most recent unresolved item is always on top.`,
+ code:`def eval_rpn(tokens):
+    stack = []
+    ops = {"+": lambda a, b: a + b, "-": lambda a, b: a - b,
+           "*": lambda a, b: a * b, "/": lambda a, b: int(a / b)}
+    for t in tokens:
+        if t in ops:
+            b, a = stack.pop(), stack.pop()
+            stack.append(ops[t](a, b))
+        else:
+            stack.append(int(t))
+    return stack[0]`,
+ cx:`O(n)`, problems:[`Valid Parentheses`,`Evaluate Reverse Polish Notation`,`Min Stack`,`Decode String`],
+ pitfall:`Use a Python list as the stack (append/pop at the end are O(1)).`},
+{id:`monotonic-stack`, name:`Monotonic stack`, signals:[`next greater / smaller element`,`span`,`largest rectangle`],
+ idea:`Keep the stack sorted. When a new element breaks the order, pop: each popped item has just found its answer.`,
+ code:`def next_greater(nums):
+    res = [-1] * len(nums)
+    stack = []                       # indices, values decreasing
+    for i, x in enumerate(nums):
+        while stack and nums[stack[-1]] < x:
+            res[stack.pop()] = x
+        stack.append(i)
+    return res`,
+ cx:`O(n) amortized`, problems:[`Daily Temperatures`,`Next Greater Element`,`Largest Rectangle in Histogram`,`Stock Span`],
+ pitfall:`Store indices, not values, when you need distances.`},
+{id:`heap`, name:`Heap / Top-K`, signals:[`k largest / smallest`,`k most frequent`,`merge k sorted lists`,`running median`,`always the next smallest`],
+ idea:`A heap gives the min in O(1) and push/pop in O(log n). Keep a heap of size k to track the top k in O(n log k).`,
+ code:`import heapq
+
+def k_largest(nums, k):
+    heap = []
+    for x in nums:
+        heapq.heappush(heap, x)
+        if len(heap) > k:
+            heapq.heappop(heap)     # drop the smallest
+    return heap                     # the k largest
+
+# max-heap trick: push -x, negate when popping`,
+ cx:`O(n log k)`, problems:[`Kth Largest Element`,`Top K Frequent Elements`,`Merge K Sorted Lists`,`Find Median from Data Stream`],
+ pitfall:`<code>heapq</code> is a min-heap only. For tuples with ties, add a counter so non-comparable items are never compared.`},
+{id:`bfs`, name:`BFS`, signals:[`shortest path, unweighted`,`minimum steps / moves`,`level by level`,`spreading (rotting, infection)`],
+ idea:`Explore in rings of increasing distance with a queue. The first time you reach a node is via a shortest path.`,
+ code:`from collections import deque
+
+def shortest_steps(graph, start, goal):
+    dist = {start: 0}
+    q = deque([start])
+    while q:
+        node = q.popleft()
+        if node == goal:
+            return dist[node]
+        for nxt in graph[node]:
+            if nxt not in dist:          # mark on enqueue
+                dist[nxt] = dist[node] + 1
+                q.append(nxt)
+    return -1`,
+ cx:`O(V + E)`, problems:[`Number of Islands`,`Rotting Oranges`,`Word Ladder`,`Binary Tree Level Order`],
+ pitfall:`Use <code>deque</code>, not <code>list.pop(0)</code>. Mark visited when enqueuing.`},
+{id:`dfs`, name:`DFS`, signals:[`explore every path`,`connected components`,`tree recursion`,`cycle detection`,`topological order`],
+ idea:`Go as deep as possible, then backtrack. Natural with recursion on trees; use an explicit stack for big graphs.`,
+ code:`def count_components(n, edges):
+    graph = {i: [] for i in range(n)}
+    for a, b in edges:
+        graph[a].append(b); graph[b].append(a)
+    seen = set()
+    def dfs(u):
+        seen.add(u)
+        for v in graph[u]:
+            if v not in seen:
+                dfs(v)
+    count = 0
+    for u in range(n):
+        if u not in seen:
+            dfs(u); count += 1
+    return count`,
+ cx:`O(V + E)`, problems:[`Max Depth of Binary Tree`,`Clone Graph`,`Course Schedule`,`Path Sum`],
+ pitfall:`Python's recursion limit is about 1000 by default; use an iterative stack for deep graphs.`},
+{id:`backtracking`, name:`Backtracking`, signals:[`return ALL combinations / permutations / subsets`,`place items under constraints`,`N-Queens, Sudoku`],
+ idea:`Build a candidate step by step: choose, explore, un-choose. Prune branches that can't lead to a valid answer.`,
+ code:`def permutations(nums):
+    res, path, used = [], [], [False] * len(nums)
+    def bt():
+        if len(path) == len(nums):
+            res.append(path[:]); return
+        for i, x in enumerate(nums):
+            if used[i]:
+                continue
+            used[i] = True; path.append(x)    # choose
+            bt()                              # explore
+            path.pop(); used[i] = False       # un-choose
+    bt()
+    return res`,
+ cx:`Exponential (n!, 2ⁿ)`, problems:[`Subsets`,`Permutations`,`Combination Sum`,`N-Queens`,`Word Search`],
+ pitfall:`Append a copy of the path. Undo every change you made before returning.`},
+{id:`greedy`, name:`Greedy`, signals:[`intervals / scheduling`,`take the locally best choice`,`sort, then sweep`],
+ idea:`Make the best local choice and never revisit it. Only correct when you can argue that a locally best choice never hurts the final answer.`,
+ code:`def max_non_overlapping(intervals):
+    intervals.sort(key=lambda iv: iv[1])   # earliest end first
+    count, end = 0, float("-inf")
+    for s, e in intervals:
+        if s >= end:
+            count += 1
+            end = e
+    return count`,
+ cx:`Usually O(n log n) for the sort`, problems:[`Merge Intervals`,`Jump Game`,`Gas Station`,`Non-overlapping Intervals`],
+ pitfall:`Always test greedy with a counterexample (coin change with [1, 3, 4] breaks "largest coin first").`},
+{id:`divide-conquer`, name:`Divide & conquer`, signals:[`split into halves`,`combine sub-results`,`merge sort, quickselect`],
+ idea:`Split the problem, solve the parts recursively, combine. Cost follows the recurrence, e.g. T(n) = 2T(n/2) + O(n) = O(n log n).`,
+ code:`def merge_sort(a):
+    if len(a) <= 1:
+        return a
+    mid = len(a) // 2
+    left, right = merge_sort(a[:mid]), merge_sort(a[mid:])
+    out, i, j = [], 0, 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:            # <= keeps it stable
+            out.append(left[i]); i += 1
+        else:
+            out.append(right[j]); j += 1
+    return out + left[i:] + right[j:]`,
+ cx:`O(n log n) for merge sort`, problems:[`Sort an Array`,`Kth Largest (quickselect)`,`Count Inversions`,`Pow(x, n)`],
+ pitfall:`Slicing copies (O(n) per level). Pass indices if memory matters.`},
+{id:`dp`, name:`Dynamic programming`, signals:[`count the ways`,`minimum / maximum of something`,`can you reach / make …`,`choices that overlap`],
+ idea:`Define a state, write the transition from smaller states, set the base cases. Memoize top-down or fill a table bottom-up.`,
+ code:`from functools import cache
+
+def climb_stairs(n):           # top-down memoization
+    @cache
+    def ways(i):
+        if i <= 1:
+            return 1
+        return ways(i - 1) + ways(i - 2)
+    return ways(n)
+
+def climb_stairs_table(n):     # bottom-up, O(1) space
+    a, b = 1, 1
+    for _ in range(n - 1):
+        a, b = b, a + b
+    return b`,
+ cx:`(number of states) × (work per state)`, problems:[`Climbing Stairs`,`Coin Change`,`Longest Increasing Subsequence`,`Edit Distance`,`0/1 Knapsack`],
+ pitfall:`State first, code second. If you can't say in one sentence what dp[i] means, stop and define it.`},
+{id:`union-find`, name:`Union-Find (DSU)`, signals:[`are these connected?`,`merge groups dynamically`,`redundant edge`,`Kruskal's MST`],
+ idea:`Each set has a representative root. find() follows parents (with path compression); union() links roots (by size). Near-constant time per operation.`,
+ code:`class DSU:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.size = [1] * n
+    def find(self, x):
+        while self.parent[x] != x:
+            self.parent[x] = self.parent[self.parent[x]]   # path halving
+            x = self.parent[x]
+        return x
+    def union(self, a, b):
+        ra, rb = self.find(a), self.find(b)
+        if ra == rb:
+            return False                 # already connected
+        if self.size[ra] < self.size[rb]:
+            ra, rb = rb, ra
+        self.parent[rb] = ra
+        self.size[ra] += self.size[rb]
+        return True`,
+ cx:`α(n) amortized, effectively constant`, problems:[`Number of Provinces`,`Redundant Connection`,`Accounts Merge`,`Kruskal MST`],
+ pitfall:`Without path compression and union by size, trees can degrade to O(n) per find.`}
+];
+
+// "If you see this, think that"
+const RECOGNIZE = [
+[`Sorted array, find a pair / triplet`,`two-pointers`],
+[`Longest / shortest contiguous subarray or substring with a condition`,`sliding-window`],
+[`Subarray sum equals k, and values can be negative`,`prefix-sum`],
+[`"Have I seen this before?" or count occurrences`,`hashing`],
+[`Sorted input, or "minimum value that works"`,`binary-search`],
+[`Linked list cycle or middle node`,`fast-slow`],
+[`Matching brackets, nested structure, undo`,`stack`],
+[`Next greater / smaller element for every index`,`monotonic-stack`],
+[`k largest, k most frequent, merge k sorted`,`heap`],
+[`Shortest path with unweighted edges, minimum steps`,`bfs`],
+[`Explore all paths, components, tree recursion`,`dfs`],
+[`Return all subsets / permutations / placements`,`backtracking`],
+[`Intervals, scheduling, locally best choice`,`greedy`],
+[`Count ways / min cost with overlapping choices`,`dp`],
+[`Dynamic connectivity, merging groups`,`union-find`]
+];
+
+// ===== RAPID FIRE =====
+const RAPID = [
+[`What does <code>yield</code> do?`,`Turns the function into a generator. Each <code>yield</code> hands out a value and pauses, keeping local state until the next <code>next()</code>.`,`Generators`],
+[`What does LEGB stand for?`,`Local → Enclosing → Global → Built-in: the order Python searches for a name.`,`Scope & closures`],
+[`Is Python compiled or interpreted?`,`Both, in CPython: source is compiled to bytecode, which the interpreter's virtual machine executes.`,`Internals`],
+[`What does <code>if __name__ == "__main__":</code> do?`,`Runs that block only when the file is executed directly, not when it's imported as a module.`,`Modules`],
+[`What does a function return if it has no <code>return</code>?`,`<code>None</code>.`,`Functions`],
+[`What is <code>self</code>?`,`The instance the method was called on, passed automatically as the first argument. The name is a convention, not a keyword.`,`OOP`],
+[`<code>append</code> vs <code>extend</code>?`,`<code>append</code> adds one object (even if it's a list). <code>extend</code> adds each item of an iterable.`,`Lists`],
+[`Can a list be a dict key?`,`No. Lists are mutable, so they're unhashable. Use a tuple.`,`Hashing`],
+[`What does <code>zip</code> return?`,`An iterator of tuples that stops at the shortest input. <code>strict=True</code> (3.10+) raises on unequal lengths.`,`Iterators`],
+[`<code>sort()</code> vs <code>sorted()</code>?`,`<code>list.sort()</code> sorts in place and returns <code>None</code>. <code>sorted()</code> accepts any iterable and returns a new list. Both are stable (Timsort).`,`Lists`],
+[`<code>x in list</code> vs <code>x in set</code>?`,`O(n) linear scan vs O(1) average hash lookup.`,`Complexity`],
+[`<code>__new__</code> vs <code>__init__</code>?`,`<code>__new__</code> creates and returns the instance; <code>__init__</code> initialises the already-created instance and returns <code>None</code>.`,`OOP`],
+[`What does <code>@property</code> do?`,`Lets a method be accessed like an attribute, so you can add validation or computation without changing the calling code.`,`OOP`],
+[`How should you check for <code>None</code>?`,`<code>x is None</code>. <code>None</code> is a singleton, and <code>==</code> can be overridden.`,`Identity vs equality`],
+[`What is <code>-7 // 2</code>?`,`<code>-4</code>. Floor division rounds toward negative infinity, not toward zero.`,`Operators`],
+[`What is <code>round(2.5)</code>?`,`<code>2</code>. Python rounds half to even (banker's rounding).`,`Operators`],
+[`Are strings mutable?`,`No. Every string "change" creates a new string.`,`Mutability`],
+[`Complexity of <code>list.pop(0)</code>?`,`O(n), because every remaining element shifts. Use <code>collections.deque.popleft()</code>, which is O(1).`,`Complexity`],
+[`Is <code>heapq</code> a min-heap or a max-heap?`,`Min-heap. For a max-heap, push negated values.`,`Heaps`],
+[`What does <code>bisect_left</code> return?`,`The leftmost index at which to insert x and keep the list sorted, i.e. the first index with a value ≥ x.`,`Binary search`],
+[`What is a <code>Counter</code>?`,`A dict subclass that counts hashable items, with helpers like <code>most_common(k)</code>.`,`Collections`],
+[`What is a <code>defaultdict</code>?`,`A dict that calls a factory (e.g. <code>list</code>, <code>int</code>) to create a value for a missing key.`,`Collections`],
+[`What is Python's default recursion limit?`,`1000 (<code>sys.getrecursionlimit()</code>). CPython has no tail-call optimisation.`,`Internals`],
+[`What does <code>@dataclass</code> generate?`,`<code>__init__</code>, <code>__repr__</code> and <code>__eq__</code> from the class's annotated fields, plus optional ordering and frozen behaviour.`,`OOP`],
+[`What is duck typing?`,`Caring about what an object can do (its methods), not what type it is.`,`OOP`],
+[`What does <code>nonlocal</code> do?`,`Lets an inner function rebind a variable in the nearest enclosing function scope.`,`Scope & closures`],
+[`What is <code>__slots__</code>?`,`Declares a fixed set of attributes so instances have no per-instance <code>__dict__</code>, which saves memory.`,`OOP`],
+[`What is a <code>frozenset</code>?`,`An immutable, hashable set, so it can be a dict key or a member of another set.`,`Hashing`],
+[`What is <code>all([])</code>?`,`<code>True</code> (vacuous truth). <code>any([])</code> is <code>False</code>.`,`Operators`],
+[`Complexity of <code>heapq.heapify</code>?`,`O(n), not O(n log n).`,`Heaps`],
+[`What does "amortized O(1) append" mean?`,`An occasional resize costs O(n), but averaged over many appends each costs O(1).`,`Complexity`],
+[`What is a stable sort?`,`One where equal elements keep their original relative order.`,`Sorting`],
+[`BFS or DFS for the shortest path in an unweighted graph?`,`BFS. DFS doesn't guarantee the shortest path.`,`Graphs`],
+[`When does Dijkstra fail?`,`With negative edge weights. Use Bellman-Ford there.`,`Graphs`],
+[`What does an inorder traversal of a BST give?`,`The keys in sorted order.`,`Trees`],
+[`What is memoization?`,`Caching a function's results by its arguments. In Python: <code>functools.cache</code> or <code>lru_cache</code>.`,`DP`],
+[`What is a hash collision?`,`Two different keys mapping to the same slot. The table must then probe or chain to tell them apart.`,`Hashing`],
+[`Does the GIL make code thread-safe?`,`No. <code>x += 1</code> is several bytecode steps; threads can still interleave between them.`,`Concurrency`],
+[`What is a shallow copy of a nested list?`,`A new outer list whose elements are the same inner objects.`,`Copying`],
+[`Why use <code>"".join(parts)</code> instead of <code>+=</code> in a loop?`,`Strings are immutable, so repeated <code>+=</code> can copy over and over (O(n²) in general). <code>join</code> builds the result in one pass.`,`Strings`],
+[`What is the time complexity of sorting in Python?`,`O(n log n) worst case, O(n) on already-sorted data (Timsort).`,`Sorting`],
+[`What is the difference between a process and a thread?`,`Processes have separate memory; threads share memory within one process.`,`Concurrency`]
+].map(([q, a, tag], i) => ({id: `rf-${i}`, q, a, tag}));
+
+// ===== INTERVIEW TRAPS =====
+const TRAPS = [
+{id:`tr-late`, title:`Lambdas created in a loop`, tag:`Scope & closures`,
+ code:`funcs = [lambda: i for i in range(3)]
+print([f() for f in funcs])`,
+ out:`[2, 2, 2]`,
+ why:`Closures capture the variable <code>i</code>, not its value. By the time the lambdas run, the loop has finished and <code>i</code> is 2. Fix: <code>lambda i=i: i</code> binds the current value as a default.`},
+{id:`tr-grid`, title:`Building a grid with <code>*</code>`, tag:`Copying`,
+ code:`grid = [[0] * 3] * 3
+grid[0][0] = 1
+print(grid)`,
+ out:`[[1, 0, 0], [1, 0, 0], [1, 0, 0]]`,
+ why:`The outer <code>* 3</code> repeats a reference to the <em>same</em> inner list three times. Fix: <code>[[0] * 3 for _ in range(3)]</code>.`},
+{id:`tr-tuple-plus`, title:`<code>+=</code> on a list inside a tuple`, tag:`Mutability`,
+ code:`t = ([1, 2],)
+try:
+    t[0] += [3]
+except TypeError as e:
+    print("error:", e)
+print(t)`,
+ out:`error: 'tuple' object does not support item assignment
+([1, 2, 3],)`,
+ why:`<code>t[0] += [3]</code> first extends the list in place (that succeeds), then tries to assign the result back into the tuple (that fails). You get an error <em>and</em> a mutation.`},
+{id:`tr-sort-none`, title:`Assigning the result of <code>sort()</code>`, tag:`Lists`,
+ code:`nums = [3, 1, 2]
+nums = nums.sort()
+print(nums)`,
+ out:`None`,
+ why:`<code>list.sort()</code> sorts in place and returns <code>None</code>. Use <code>nums.sort()</code> on its own, or <code>nums = sorted(nums)</code>.`},
+{id:`tr-bool-key`, title:`<code>1</code>, <code>True</code> and <code>1.0</code> as keys`, tag:`Hashing`,
+ code:`d = {1: "one", True: "true", 1.0: "float"}
+print(d)`,
+ out:`{1: 'float'}`,
+ why:`<code>bool</code> is a subclass of <code>int</code>, and <code>1 == True == 1.0</code> with equal hashes, so they're the same key. The first key object is kept and the value is overwritten.`},
+{id:`tr-float`, title:`Floating-point equality`, tag:`Operators`,
+ code:`print(0.1 + 0.2 == 0.3)
+print(round(2.5), round(3.5))`,
+ out:`False
+2 4`,
+ why:`0.1 and 0.2 have no exact binary representation; use <code>math.isclose</code>. <code>round</code> uses round-half-to-even. Use <code>decimal.Decimal</code> for money.`},
+{id:`tr-remove-iter`, title:`Removing items while iterating`, tag:`Lists`,
+ code:`nums = [1, 2, 2, 3]
+for x in nums:
+    if x == 2:
+        nums.remove(x)
+print(nums)`,
+ out:`[1, 2, 3]`,
+ why:`Removing shifts the remaining items left, so the loop's internal index skips the element after each removal. Build a new list instead: <code>[x for x in nums if x != 2]</code>.`},
+{id:`tr-andor`, title:`<code>and</code> / <code>or</code> return operands`, tag:`Operators`,
+ code:`print([] or "default")
+print(0 and 1 / 0)
+print("a" and "b")`,
+ out:`default
+0
+b`,
+ why:`<code>or</code> returns the first truthy operand (or the last one); <code>and</code> returns the first falsy operand (or the last one). Short-circuiting means <code>1 / 0</code> is never evaluated.`},
+{id:`tr-finally`, title:`<code>return</code> inside <code>finally</code>`, tag:`Exceptions`,
+ code:`def f():
+    try:
+        return "try"
+    finally:
+        return "finally"
+print(f())`,
+ out:`finally`,
+ why:`<code>finally</code> always runs, and its <code>return</code> replaces the pending one. It would even swallow an exception. Python 3.14 emits a <code>SyntaxWarning</code> for this pattern (PEP 765). Don't return from <code>finally</code>.`},
+{id:`tr-floordiv`, title:`Negative floor division`, tag:`Operators`,
+ code:`print(-7 // 2, -7 % 2)
+print(int(-3.5))`,
+ out:`-4 1
+-3`,
+ why:`<code>//</code> floors toward negative infinity and <code>%</code> takes the sign of the divisor, so <code>(a // b) * b + a % b == a</code> holds. <code>int()</code> truncates toward zero, which differs for negatives.`},
+{id:`tr-default`, title:`Mutable default, predict-the-output version`, tag:`Mutability`,
+ code:`def f(x, acc=[]):
+    acc.append(x)
+    return acc
+f(1)
+print(f(2))`,
+ out:`[1, 2]`,
+ why:`The default list is created once at definition time and shared by every call. Use <code>acc=None</code> and create the list inside.`},
+{id:`tr-classvar`, title:`Mutable class variable`, tag:`OOP`,
+ code:`class Dog:
+    tricks = []
+    def add(self, t):
+        self.tricks.append(t)
+
+a, b = Dog(), Dog()
+a.add("sit")
+print(b.tricks)`,
+ out:`['sit']`,
+ why:`<code>tricks</code> is defined on the class, so all instances share one list. Create per-instance state in <code>__init__</code>: <code>self.tricks = []</code>.`},
+{id:`tr-except-order`, title:`Order of <code>except</code> clauses`, tag:`Exceptions`,
+ code:`try:
+    int("x")
+except Exception:
+    print("generic")
+except ValueError:
+    print("value")`,
+ out:`generic`,
+ why:`The first matching clause wins, and <code>ValueError</code> is a subclass of <code>Exception</code>. Put specific exceptions first.`},
+{id:`tr-is-int`, title:`<code>is</code> with integers (CPython detail)`, tag:`Identity vs equality`,
+ code:`a = 256
+b = 256
+print(a is b)
+x = int("1000")
+y = int("1000")
+print(x is y)`,
+ out:`True
+False`,
+ why:`CPython caches the integers −5 to 256, so both names point to one object. 1000 isn't cached, so two separate objects are created. This is an implementation detail; always use <code>==</code> for values.`},
+{id:`tr-str-upper`, title:`Calling a string method without assigning`, tag:`Strings`,
+ code:`s = "hello"
+s.upper()
+print(s)`,
+ out:`hello`,
+ why:`Strings are immutable; <code>upper()</code> returns a new string, which is discarded here. Write <code>s = s.upper()</code>.`},
+{id:`tr-gen-twice`, title:`Consuming a generator twice`, tag:`Generators`,
+ code:`g = (x for x in range(3))
+print(sum(g), sum(g))`,
+ out:`3 0`,
+ why:`Generators are single-pass. The first <code>sum</code> exhausts it, so the second sees nothing.`}
+];
+
+// ===== QUIZ BANK =====
+// type: mcq | tf | predict | bug | fill | code
+const QUIZ = [
+{id:`qz-1`, type:`predict`, set:`py`, tag:`Scope & closures`,
+ q:`What does this print?`, code:`funcs = [lambda: i for i in range(3)]
+print([f() for f in funcs])`,
+ options:[`[0, 1, 2]`,`[2, 2, 2]`,`[3, 3, 3]`,`NameError`], ans:1,
+ explain:`Each lambda looks up <code>i</code> when it's called, after the loop has finished with <code>i == 2</code>.`,
+ why:[`That would need early binding, e.g. <code>lambda i=i: i</code>.`,null,`<code>range(3)</code> stops at 2; <code>i</code> never becomes 3.`,`<code>i</code> is still reachable: the comprehension's scope is kept alive by the closures.`],
+ interview:`The classic late-binding closure question; expect a follow-up asking how to fix it.`},
+{id:`qz-2`, type:`predict`, set:`py`, tag:`Copying`,
+ q:`What does this print?`, code:`grid = [[0] * 3] * 3
+grid[0][0] = 1
+print(grid)`,
+ options:[`[[1, 0, 0], [0, 0, 0], [0, 0, 0]]`,`[[1, 0, 0], [1, 0, 0], [1, 0, 0]]`,`[[1, 1, 1], [0, 0, 0], [0, 0, 0]]`,`TypeError`], ans:1,
+ explain:`All three rows are the same list object, so changing one "row" changes them all.`,
+ why:[`This is what you'd get with <code>[[0] * 3 for _ in range(3)]</code>.`,null,`<code>[0] * 3</code> copies the int, which is immutable, so only index 0 of the shared row changes.`,`Multiplying a list by an int is valid.`],
+ interview:`Tests references inside containers, which matters in DP table initialisation.`},
+{id:`qz-3`, type:`mcq`, set:`py`, tag:`Hashing`,
+ q:`Which of these can be used as a dict key?`,
+ options:[`[1, 2]`,`(1, [2])`,`(1, 2)`,`{1, 2}`], ans:2,
+ explain:`A tuple is hashable only when all of its items are hashable.`,
+ why:[`Lists are mutable, so unhashable.`,`The tuple contains a list, so hashing it fails.`,null,`Sets are mutable, so unhashable (a <code>frozenset</code> would work).`],
+ interview:`Leads straight into "why must dict keys be immutable?"`},
+{id:`qz-4`, type:`tf`, set:`py`, tag:`Identity vs equality`,
+ q:`True or false: if <code>a is b</code> is True, then <code>a == b</code> must also be True.`,
+ options:[`True`,`False`], ans:1,
+ explain:`<code>==</code> calls <code>__eq__</code>, which can return anything. For example <code>x = float("nan")</code>: <code>x is x</code> is True, but <code>x == x</code> is False.`,
+ why:[`Identity usually implies equality, but not always; NaN is the standard counterexample.`,null],
+ interview:`A "tricky" question that separates people who memorised from people who understand.`},
+{id:`qz-5`, type:`predict`, set:`py`, tag:`Mutability`,
+ q:`What happens?`, code:`t = ([1, 2],)
+t[0] += [3]`,
+ options:[`t becomes ([1, 2, 3],) with no error`,`TypeError, and t is unchanged`,`TypeError, but t is now ([1, 2, 3],)`,`SyntaxError`], ans:2,
+ explain:`The list is extended in place first, then assignment into the tuple fails.`,
+ why:[`The assignment back into the tuple always fails.`,`The in-place extend has already happened before the assignment fails.`,null,`The syntax is valid.`],
+ interview:`One of the best-known Python "gotchas".`},
+{id:`qz-6`, type:`bug`, set:`py`, tag:`Mutability`,
+ q:`This function should return a fresh list on every call. What's the bug?`, code:`def collect(x, items=[]):
+    items.append(x)
+    return items`,
+ options:[`<code>append</code> should be <code>extend</code>`,`The default <code>[]</code> is created once and shared between calls`,`The <code>return</code> statement is misplaced`,`<code>items</code> must be declared <code>global</code>`], ans:1,
+ explain:`Default values are evaluated once at definition time. Use <code>items=None</code>.`,
+ why:[`<code>extend</code> would add the elements of x; that's not the issue.`,null,`The return is fine.`,`No global is involved.`],
+ interview:`Asked in almost every Python interview.`},
+{id:`qz-7`, type:`mcq`, set:`dsa`, tag:`Complexity`,
+ q:`What is the time complexity of <code>list.pop(0)</code>?`,
+ options:[`O(1)`,`O(log n)`,`O(n)`,`O(n log n)`], ans:2,
+ explain:`Every remaining element shifts one position left.`,
+ why:[`That's <code>pop()</code> from the end.`,`Nothing is halved here.`,null,`No sorting happens.`],
+ interview:`Explains why BFS should use <code>deque</code>.`},
+{id:`qz-8`, type:`mcq`, set:`dsa`, tag:`Graphs`,
+ q:`Which is the best queue for BFS in Python?`,
+ options:[`A list with <code>pop(0)</code>`,`<code>collections.deque</code>`,`<code>heapq</code>`,`A <code>set</code>`], ans:1,
+ explain:`<code>deque</code> gives O(1) <code>append</code> and <code>popleft</code>.`,
+ why:[`<code>pop(0)</code> is O(n), making BFS O(n²) in the worst case.`,null,`A heap orders by priority (Dijkstra), not FIFO.`,`Sets have no order.`],
+ interview:`Interviewers notice when you reach for <code>pop(0)</code>.`},
+{id:`qz-9`, type:`predict`, set:`py`, tag:`Generators`,
+ q:`What does this print?`, code:`g = (x for x in range(3))
+print(sum(g), sum(g))`,
+ options:[`3 3`,`3 0`,`0 0`,`TypeError`], ans:1,
+ explain:`The first <code>sum</code> exhausts the generator.`,
+ why:[`That would happen with a list.`,null,`The first sum does see all three values: 0 + 1 + 2 = 3.`,`Summing an empty iterator returns 0, not an error.`],
+ interview:`Checks that you know generators are single-pass.`},
+{id:`qz-10`, type:`fill`, set:`py`, tag:`Scope & closures`,
+ q:`Fill in the blank: name lookup order is Local → ____ → Global → Built-in.`,
+ options:[`Enclosing`,`External`,`Environment`,`Extended`], ans:0,
+ explain:`Enclosing = the scopes of any enclosing functions, which is what closures rely on.`,
+ why:[null,`Not a Python scope.`,`Not a Python scope.`,`Not a Python scope.`],
+ interview:`Usually a warm-up before closure questions.`},
+{id:`qz-11`, type:`mcq`, set:`py`, tag:`Concurrency`,
+ q:`In standard CPython, which task benefits most from multiprocessing instead of threading?`,
+ options:[`Downloading 100 web pages`,`Computing primes in pure Python`,`Waiting on database queries`,`Reading many small files`], ans:1,
+ explain:`CPU-bound pure-Python work is limited by the GIL in threads; separate processes each have their own GIL.`,
+ why:[`I/O-bound: threads or asyncio work well.`,null,`I/O-bound: the GIL is released while waiting.`,`Mostly I/O-bound.`],
+ interview:`The standard GIL follow-up question.`},
+{id:`qz-12`, type:`predict`, set:`py`, tag:`OOP`,
+ q:`Given <code>class D(B, C)</code> where B and C both inherit A, and every <code>hi()</code> prints its class name then calls <code>super().hi()</code> (A's doesn't), what does <code>D().hi()</code> print?`,
+ options:[`D B A`,`D B C A`,`D B A C A`,`D C B A`], ans:1,
+ explain:`The MRO is D, B, C, A, object. B's <code>super()</code> goes to C, the next class in D's MRO.`,
+ why:[`That assumes <code>super()</code> means "parent"; it means "next in the MRO".`,null,`C3 linearization lists each class once.`,`Base classes keep the order they're declared in: B before C.`],
+ interview:`The MRO question in nearly every OOP-heavy Python interview.`},
+{id:`qz-13`, type:`code`, set:`py`, tag:`Copying`,
+ q:`Which line creates a 3×3 grid with independent rows?`,
+ options:[`<code>[[0] * 3] * 3</code>`,`<code>[[0] * 3 for _ in range(3)]</code>`,`<code>[[0, 0, 0]] * 3</code>`,`<code>list([0] * 3) * 3</code>`], ans:1,
+ explain:`The comprehension evaluates <code>[0] * 3</code> three times, creating three separate lists.`,
+ why:[`Repeats one shared row.`,null,`Also repeats one shared row.`,`Produces a flat list of 9 zeros.`],
+ interview:`Shows up in DP problems when you build the table.`},
+{id:`qz-14`, type:`mcq`, set:`dsa`, tag:`Sliding window`,
+ q:`When does a sliding window correctly solve "longest subarray with sum ≤ k"?`,
+ options:[`Always`,`Only if all numbers are non-negative`,`Only if the array is sorted`,`Never; use DP`], ans:1,
+ explain:`Shrinking from the left only reduces the sum if values are non-negative. With negatives, the window logic breaks; use prefix sums.`,
+ why:[`Negative numbers break the monotonic behaviour.`,null,`Sortedness doesn't matter; the subarray must stay contiguous.`,`Sliding window is correct and O(n) when values are non-negative.`],
+ interview:`Interviewers love asking "what if the numbers can be negative?"`},
+{id:`qz-15`, type:`mcq`, set:`dsa`, tag:`Binary search`,
+ q:`<code>bisect.bisect_left([1, 2, 2, 2, 3], 2)</code> returns…`,
+ options:[`1`,`2`,`3`,`4`], ans:0,
+ explain:`It returns the first index where 2 could be inserted while keeping order, i.e. the first index with a value ≥ 2.`,
+ why:[null,`That's a middle occurrence; bisect_left finds the leftmost.`,`Not a boundary.`,`That's <code>bisect_right</code>.`],
+ interview:`Lower/upper bound is the core of most binary search variants.`},
+{id:`qz-16`, type:`mcq`, set:`dsa`, tag:`Graphs`,
+ q:`What happens if you run Dijkstra on a graph with a negative edge weight?`,
+ options:[`It still works, just slower`,`It can return wrong shortest distances`,`It raises an error`,`It loops forever`], ans:1,
+ explain:`Dijkstra assumes that once a node is popped, its distance is final. A negative edge can later produce a shorter path. Use Bellman-Ford.`,
+ why:[`It's not a speed issue; the correctness guarantee breaks.`,null,`Nothing in the algorithm detects negative weights.`,`With a visited set it terminates, just with a possibly wrong answer.`],
+ interview:`Standard graph-algorithm follow-up.`},
+{id:`qz-17`, type:`predict`, set:`py`, tag:`Operators`,
+ q:`What does this print?`, code:`print(-7 // 2, -7 % 2)`,
+ options:[`-3 -1`,`-4 1`,`-3 1`,`-4 -1`], ans:1,
+ explain:`Floor division rounds toward negative infinity; the remainder takes the sign of the divisor.`,
+ why:[`That's C/Java truncation behaviour.`,null,`Mixes truncation and Python modulo.`,`Python's modulo with a positive divisor is non-negative.`],
+ interview:`Matters in problems that use modulo with negative numbers.`},
+{id:`qz-18`, type:`tf`, set:`py`, tag:`Hashing`,
+ q:`True or false: dicts preserve insertion order as a language guarantee.`,
+ options:[`True`,`False`], ans:0,
+ explain:`Guaranteed since Python 3.7 (an implementation detail of CPython 3.6).`,
+ why:[null,`That was true before 3.7.`],
+ interview:`An outdated "dicts are unordered" answer is a red flag.`},
+{id:`qz-19`, type:`mcq`, set:`dsa`, tag:`DP`,
+ q:`What is the minimum number of coins to make 6 with coins [1, 3, 4]?`,
+ options:[`1`,`2`,`3`,`4`], ans:1,
+ explain:`3 + 3 = 6. Greedy (largest first) picks 4 + 1 + 1 = 3 coins, which is why coin change needs DP.`,
+ why:[`No single coin equals 6.`,null,`That's the greedy answer, which isn't optimal.`,`Not minimal.`],
+ interview:`The canonical "why greedy fails" example.`},
+{id:`qz-20`, type:`mcq`, set:`dsa`, tag:`Heaps`,
+ q:`What is the time complexity of <code>heapq.heapify(lst)</code>?`,
+ options:[`O(log n)`,`O(n)`,`O(n log n)`,`O(n²)`], ans:1,
+ explain:`Bottom-up heap construction is O(n): most nodes are near the bottom and sift down only a little.`,
+ why:[`Too fast; every element must be visited.`,null,`That's n separate pushes, not heapify.`,`Far too slow.`],
+ interview:`A favourite trick question.`},
+{id:`qz-21`, type:`predict`, set:`py`, tag:`Exceptions`,
+ q:`What does this print?`, code:`try:
+    int("x")
+except Exception:
+    print("generic")
+except ValueError:
+    print("value")`,
+ options:[`generic`,`value`,`generic value`,`Nothing; it crashes`], ans:0,
+ explain:`The first matching clause wins. <code>ValueError</code> is a subclass of <code>Exception</code>, so the first clause catches it.`,
+ why:[null,`That clause is unreachable here.`,`Only one handler runs.`,`The exception is caught.`],
+ interview:`Tests knowledge of the exception hierarchy.`},
+{id:`qz-22`, type:`bug`, set:`dsa`, tag:`Stack`,
+ q:`This bracket checker crashes on <code>")"</code>. Why?`, code:`def is_valid(s):
+    pairs = {")": "(", "]": "[", "}": "{"}
+    stack = []
+    for ch in s:
+        if ch in pairs:
+            if stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+        else:
+            stack.append(ch)
+    return not stack`,
+ options:[`<code>pairs</code> is reversed`,`It reads <code>stack[-1]</code> while the stack is empty`,`It should return <code>len(stack) == 1</code>`,`<code>append</code> should be <code>insert(0, ch)</code>`], ans:1,
+ explain:`Add <code>not stack or</code> before the comparison.`,
+ why:[`The mapping closer → opener is correct.`,null,`An empty stack at the end is the success condition.`,`Appending at the end is the right stack operation.`],
+ interview:`Edge-case handling is exactly what's being graded.`},
+{id:`qz-23`, type:`mcq`, set:`dsa`, tag:`Backtracking`,
+ q:`In the subsets backtracking solution, why <code>result.append(path[:])</code> instead of <code>result.append(path)</code>?`,
+ options:[`Slicing is faster`,`<code>path</code> keeps changing; without a copy every entry is the same list`,`Lists can't be appended to lists`,`To sort the subset`], ans:1,
+ explain:`All the appended references would point to one list, which is empty by the end.`,
+ why:[`Copying is slower, not faster.`,null,`Nested lists are perfectly fine.`,`Slicing doesn't sort.`],
+ interview:`The most common backtracking bug.`},
+{id:`qz-24`, type:`predict`, set:`py`, tag:`Hashing`,
+ q:`What does this print?`, code:`d = {1: "one", True: "true", 1.0: "float"}
+print(d)`,
+ options:[`{1: 'one', True: 'true', 1.0: 'float'}`,`{1: 'float'}`,`{True: 'float'}`,`{1.0: 'float'}`], ans:1,
+ explain:`They're equal with equal hashes, so they're one key. The first key object (1) is kept and the value is overwritten.`,
+ why:[`Equal keys collapse into one.`,null,`The key object isn't replaced, only the value.`,`The key object isn't replaced, only the value.`],
+ interview:`Tests hashing plus the fact that bool subclasses int.`}
+];
+
+// Extra mock-interview questions (DSA conceptual)
+const MOCK_EXTRA = [
+{id:`mk-bigo`, diff:1, track:`dsa`, q:`What are the time complexities of the common list and dict operations in Python?`,
+ answer:`List: index O(1), append amortized O(1), pop() O(1), pop(0) or insert(0) O(n), membership O(n), sort O(n log n). Dict and set: get, set, delete and membership are O(1) average, O(n) worst case, because they're hash tables.`,
+ points:[`List index O(1)`,`append amortized O(1)`,`insert/pop at front O(n)`,`list membership O(n)`,`dict/set ops O(1) average`,`worst case O(n) due to collisions`]},
+{id:`mk-bfs-dfs`, diff:2, track:`dsa`, q:`When would you use BFS instead of DFS?`,
+ answer:`BFS explores level by level with a queue, so it finds shortest paths in unweighted graphs and suits "minimum steps" problems. DFS goes deep with recursion or a stack and suits exploring all paths, connected components, cycle detection and topological sort. Both are O(V + E). BFS memory grows with the graph's width, DFS memory with its depth.`,
+ points:[`BFS uses a queue, DFS a stack/recursion`,`BFS gives shortest path in unweighted graphs`,`DFS for all paths, components, cycles, topological sort`,`Both O(V + E)`,`Memory: BFS width vs DFS depth`]},
+{id:`mk-dp`, diff:2, track:`dsa`, q:`What is dynamic programming, and how do you recognise a DP problem?`,
+ answer:`DP solves a problem by combining solutions to overlapping subproblems that have optimal substructure. Signals: "count the ways", "minimum/maximum", "can you reach", with choices at each step whose sub-results repeat. Approach: define the state, write the transition from smaller states, set base cases, then memoize top-down or fill a table bottom-up. Time is roughly the number of states times the work per state.`,
+ points:[`Overlapping subproblems`,`Optimal substructure`,`Define state, transition, base case`,`Memoization vs tabulation`,`Signals: count ways / min / max with repeated choices`,`Complexity = states × work per state`]},
+{id:`mk-collision`, diff:2, track:`dsa`, q:`How does a hash map handle collisions?`,
+ answer:`A collision is when two keys map to the same bucket. Chaining stores a list (or tree) of entries per bucket. Open addressing probes for another slot (linear, quadratic or pseudo-random probing); CPython's dict uses open addressing. A good hash function and resizing when the load factor gets high keep chains or probe sequences short, so operations stay O(1) on average, with an O(n) worst case.`,
+ points:[`Collision = same bucket for different keys`,`Chaining`,`Open addressing / probing`,`CPython dict uses open addressing`,`Resize at high load factor`,`O(1) average, O(n) worst`]},
+{id:`mk-sliding`, diff:2, track:`dsa`, q:`How do you recognise a sliding window problem, and when does it fail?`,
+ answer:`Look for a contiguous subarray or substring with a "longest", "shortest" or "at most k" condition. Expand the right edge, and shrink the left while the window is invalid; each element enters and leaves once, so it's O(n). It relies on monotonic behaviour: growing the window only makes it "more invalid". With negative numbers in sum problems that breaks, so you use prefix sums with a hash map instead.`,
+ points:[`Contiguous subarray/substring`,`Longest/shortest/at most k`,`Expand right, shrink left while invalid`,`O(n), each element in/out once`,`Fails when monotonicity breaks (negative numbers)`,`Alternative: prefix sum + hash map`]},
+{id:`mk-quick-merge`, diff:3, track:`dsa`, q:`Compare quicksort and merge sort. Which does Python use?`,
+ answer:`Merge sort is O(n log n) in all cases, stable, and needs O(n) extra space. Quicksort averages O(n log n) but degrades to O(n²) with bad pivots; it's in-place (O(log n) stack) and usually fast in practice, but not stable. Python uses Timsort, a hybrid of merge sort and insertion sort that exploits existing sorted runs: O(n log n) worst case, O(n) on sorted input, and stable.`,
+ points:[`Merge sort O(n log n) always, stable, O(n) space`,`Quicksort average O(n log n), worst O(n²)`,`Quicksort in-place, not stable`,`Python uses Timsort`,`Timsort stable, O(n) best case on runs`]}
+];
+
+// ===== LAST-MINUTE REVISION =====
+const CX_TABLES = [
+{name:`list`, rows:[[`l[i], l[i] = x`,`O(1)`],[`append(x)`,`O(1) amortized`],[`pop()`,`O(1)`],[`pop(0), insert(0, x)`,`O(n)`],[`x in l`,`O(n)`],[`l[a:b]`,`O(b − a)`],[`sort()`,`O(n log n)`],[`len(l)`,`O(1)`]]},
+{name:`dict / set`, rows:[[`d[k], d[k] = v`,`O(1) avg`],[`k in d`,`O(1) avg`],[`del d[k]`,`O(1) avg`],[`iterate`,`O(n)`],[`worst case (collisions)`,`O(n)`],[`set a & b`,`O(min(len a, len b))`]]},
+{name:`deque`, rows:[[`append, appendleft`,`O(1)`],[`pop, popleft`,`O(1)`],[`d[i] in the middle`,`O(n)`]]},
+{name:`heapq`, rows:[[`heappush, heappop`,`O(log n)`],[`heapify`,`O(n)`],[`peek h[0]`,`O(1)`],[`nlargest(k, …)`,`O(n log k)`]]},
+{name:`str`, rows:[[`s[i]`,`O(1)`],[`s + t`,`O(len s + len t)`],[`"".join(parts)`,`O(total length)`],[`sub in s`,`O(n·m) worst`]]}
+];
+
+const IDIOMS = `from collections import Counter, defaultdict, deque
+from functools import cache
+import heapq, bisect, math
+
+graph = defaultdict(list)                 # adjacency list
+for a, b in edges:
+    graph[a].append(b)
+    graph[b].append(a)
+
+DIRS = ((1, 0), (-1, 0), (0, 1), (0, -1))  # grid neighbours
+INF = float("inf")
+
+heapq.heappush(h, -x)                     # max-heap: store negatives
+heapq.heappush(h, (dist, node))           # priority by first item
+
+i = bisect.bisect_left(arr, x)            # first index with arr[i] >= x
+items.sort(key=lambda p: (-p[1], p[0]))   # sort by 2nd desc, then 1st asc
+
+freq = Counter(s)                         # character counts
+q = deque([start])                        # BFS queue
+
+@cache                                    # memoized recursion
+def solve(i, j): ...
+
+import sys
+sys.setrecursionlimit(10**6)              # deep recursion (stack can still overflow)`;
+
+const PLAN = [
+[`Clarify`,`Restate the problem. Ask about input size, duplicates, negatives, empty input, and whether you may mutate the input.`],
+[`Examples`,`Work through one normal case and one edge case by hand before coding.`],
+[`Brute force`,`Say the obvious solution and its complexity out loud. It proves you understand the problem.`],
+[`Optimise`,`Name the pattern ("this is a sliding window because…") and the new complexity.`],
+[`Code`,`Write clean Python with meaningful names. Talk while you write.`],
+[`Test`,`Dry-run your own code on the examples, then the edge cases. Fix bugs calmly.`],
+[`Analyse`,`State the final time and space complexity and any trade-offs.`]
+];
+
+const PATH = {
+ python:[`Python Fundamentals`,`Variables & Data Types`,`Operators`,`Control Flow`,`Strings`,`Lists`,`Tuples`,`Sets`,`Dictionaries`,`Functions`,`Scope & Closures`,`Recursion`,`Modules & Packages`,`File Handling`,`Exception Handling`,`OOP`,`Iterators & Generators`,`Decorators`,`Context Managers`,`Advanced Python (async, concurrency, typing)`,`Python Internals`,`Standard Library`,`Testing (pytest)`],
+ dsa:[`Complexity Analysis`,`Python for DSA (idioms)`,`Arrays`,`Strings`,`Hashing`,`Linked Lists`,`Stack`,`Queue`,`Recursion`,`Searching`,`Sorting`,`Trees`,`Heaps`,`Tries`,`Graphs`,`Greedy`,`Backtracking`,`Dynamic Programming`,`Bit Manipulation`,`Intervals & Matrix`,`Advanced DSA`]
+};
+
+</script>
+<script>
+"use strict";
+// ---------- helpers ----------
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
+const strip = h => String(h).replace(/<[^>]+>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
+const view = $("#view");
+const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const pct = (a, b) => b ? Math.round(100 * a / b) : 0;
+const LV = {1: "🟢 Beginner", 2: "🟡 Intermediate", 3: "🔴 Advanced"};
+const PAT = Object.fromEntries(PATTERNS.map(p => [p.id, p]));
+PAT["linked-list"] = {id: "linked-list", name: "Linked list pointers"};
+const patName = id => (PAT[id] && PAT[id].name) || id;
+
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), 1800);
+}
+
+// ---------- syntax highlighting ----------
+const KW = new Set("False None True and as assert async await break class continue def del elif else except finally for from global if import in is lambda nonlocal not or pass raise return try while with yield match case".split(" "));
+const BI = new Set("print len range enumerate zip map filter sum min max sorted list dict set tuple int float str bool any all iter next open isinstance super type id hash repr abs round object frozenset reversed self cls".split(" "));
+function hl(code) {
+  const re = /(#[^\n]*)|((?:\b[rbfRBF]{1,2})?(?:"""[\s\S]*?"""|'''[\s\S]*?'''|"(?:\\.|[^"\\\n])*"|'(?:\\.|[^'\\\n])*'))|(@[A-Za-z_][\w.]*)|(\b\d[\d_]*(?:\.\d+)?(?:e[+-]?\d+)?\b)|(\b[A-Za-z_]\w*\b)/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(code))) {
+    out += esc(code.slice(last, m.index));
+    const t = m[0];
+    if (m[1]) out += `<span class="c">${esc(t)}</span>`;
+    else if (m[2]) out += `<span class="s">${esc(t)}</span>`;
+    else if (m[3]) out += `<span class="d">${esc(t)}</span>`;
+    else if (m[4]) out += `<span class="n">${esc(t)}</span>`;
+    else out += KW.has(t) ? `<span class="k">${t}</span>` : BI.has(t) ? `<span class="b">${t}</span>` : esc(t);
+    last = re.lastIndex;
+  }
+  return out + esc(code.slice(last));
+}
+const CODES = [];
+function codeBlock(src) {
+  CODES.push(src);
+  return `<div class="code"><button class="copy" data-copy="${CODES.length - 1}">Copy</button><pre><code style="background:none;padding:0;font-size:inherit">${hl(src)}</code></pre></div>`;
+}
+document.addEventListener("click", e => {
+  const b = e.target.closest("[data-copy]");
+  if (!b) return;
+  const txt = CODES[+b.dataset.copy];
+  (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(
+    () => { b.textContent = "Copied"; setTimeout(() => b.textContent = "Copy", 1200); },
+    () => toast("Copy isn't available here; select the code instead."));
+});
+
+// ---------- state & persistence ----------
+const KEY = "pydsa-prep-v1";
+const DEF = {py:{}, dsa:{}, pat:{}, traps:{}, rf:{}, quiz:[], wrong:{}, mock:[], days:[], last:null, updatedAt:0};
+const fresh = () => JSON.parse(JSON.stringify(DEF));
+function normalize(o) { const s = fresh(); if (o && typeof o === "object") for (const k in s) if (k in o) s[k] = o[k]; return s; }
+let S = (() => { try { const r = localStorage.getItem(KEY); if (r) return normalize(JSON.parse(r)); } catch (e) {} return fresh(); })();
+const today = () => new Date().toLocaleDateString("en-CA");
+function save(activity = true) {
+  if (activity) { const d = today(); if (!S.days.includes(d)) { S.days.push(d); S.days = S.days.slice(-90); } }
+  S.updatedAt = Date.now();
+  try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+  scheduleRemote();
+  renderNav();
+}
+// account sync via db capability (falls back to browser storage)
+let REF = null, writing = false, pending = false, remoteTimer = null;
+function scheduleRemote() { if (!REF) return; clearTimeout(remoteTimer); remoteTimer = setTimeout(pushRemote, 1200); }
+async function pushRemote() {
+  if (!REF) return;
+  if (writing) { pending = true; return; }
+  writing = true;
+  try { await REF.set(JSON.parse(JSON.stringify(S))); setSync("Progress saved to your account"); }
+  catch (e) { setSync("Saved in this browser"); }
+  writing = false;
+  if (pending) { pending = false; pushRemote(); }
+}
+function setSync(t) { $("#sync").textContent = t; }
+async function initSync() {
+  if (!window.claude || !window.claude.use) return;
+  try {
+    const [user, db] = await Promise.all([window.claude.use("user"), window.claude.use("db")]);
+    if (!user || !db) return;
+    const uid = await user.id();
+    if (!uid) return;
+    REF = db.doc("data/users/" + uid + "/progress");
+    const snap = await REF.get();
+    if (snap.exists) {
+      const remote = JSON.parse(JSON.stringify(snap.data() || {}));
+      if ((remote.updatedAt || 0) > (S.updatedAt || 0)) {
+        S = normalize(remote);
+        try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {}
+        route();
+      } else if ((S.updatedAt || 0) > (remote.updatedAt || 0)) pushRemote();
+    } else if (S.updatedAt) pushRemote();
+    setSync("Progress saved to your account");
+  } catch (e) { REF = null; }
+}
+let SAMPLE = null, sampleChecked = false;
+async function initSample() {
+  if (window.claude && window.claude.use) { try { SAMPLE = await window.claude.use("sample"); } catch (e) { SAMPLE = null; } }
+  sampleChecked = true;
+  if ((location.hash || "").startsWith("#/mock") && !MOCK.session) route();
+}
+
+// ---------- derived progress ----------
+const DAY = 864e5;
+const rfKnown = () => RAPID.filter(r => S.rf[r.id] && S.rf[r.id].box >= 2).length;
+const rfDue = () => RAPID.filter(r => !S.rf[r.id] || S.rf[r.id].due <= Date.now()).length;
+function stats() {
+  const py = Object.values(S.py).filter(v => v === "got").length;
+  const dsa = Object.values(S.dsa).filter(v => v === "solved").length;
+  const pat = Object.keys(S.pat).length;
+  const rf = rfKnown();
+  const qs = S.quiz.slice(-5); const quiz = qs.length ? Math.round(qs.reduce((a, q) => a + 100 * q.score / q.total, 0) / qs.length) : 0;
+  const ms = S.mock.slice(-5); const mock = ms.length ? Math.round(ms.reduce((a, m) => a + m.avg * 10, 0) / ms.length) : 0;
+  const p = {py: pct(py, PY.length), dsa: pct(dsa, DSA.length), pat: pct(pat, PATTERNS.length), rf: pct(rf, RAPID.length), quiz, mock};
+  p.ready = Math.round(.22 * p.py + .22 * p.dsa + .14 * p.pat + .12 * p.rf + .16 * p.quiz + .14 * p.mock);
+  return {py, dsa, pat, rf, p};
+}
+function weakAreas() {
+  const w = {};
+  const add = t => w[t] = (w[t] || 0) + 1;
+  for (const id in S.wrong) { const q = QUIZ.find(x => x.id === id); if (q) add(q.tag); }
+  for (const id in S.py) if (S.py[id] === "review") { const q = PY.find(x => x.id === id); if (q) add(q.tag); }
+  for (const id in S.dsa) if (S.dsa[id] === "attempted") { const q = DSA.find(x => x.id === id); if (q) add(patName(q.pattern)); }
+  return Object.entries(w).sort((a, b) => b[1] - a[1]);
+}
+function streak() {
+  const set = new Set(S.days); let n = 0; const d = new Date();
+  if (!set.has(today())) d.setDate(d.getDate() - 1);
+  while (set.has(d.toLocaleDateString("en-CA"))) { n++; d.setDate(d.getDate() - 1); }
+  return n;
+}
+
+// ---------- nav ----------
+const NAV = [
+  ["Overview", [["dashboard", "Dashboard"], ["path", "Learning path"]]],
+  ["Interview essentials", [["python", "Most-asked Python", () => `${Object.values(S.py).filter(v => v === "got").length}/${PY.length}`],
+    ["dsa", "Most-asked DSA", () => `${Object.values(S.dsa).filter(v => v === "solved").length}/${DSA.length}`],
+    ["patterns", "Pattern finder", () => `${Object.keys(S.pat).length}/${PATTERNS.length}`],
+    ["rapid", "Rapid fire", () => `${RAPID.length}`], ["traps", "Interview traps", () => `${Object.keys(S.traps).length}/${TRAPS.length}`],
+    ["revise", "Last-minute revision"]]],
+  ["Practice", [["quiz", "Quiz"], ["flash", "Flashcards", () => { const d = rfDue(); return d ? `${d} due` : ""; }],
+    ["mock", "Mock interview"], ["mistakes", "Mistake review", () => { const n = Object.keys(S.wrong).length; return n ? `${n}` : ""; }]]]
+];
+let CUR = "dashboard";
+function renderNav() {
+  $("#nav").innerHTML = NAV.map(([g, items]) => `<div class="navgroup"><h4>${g}</h4>${items.map(([r, l, c]) =>
+    `<a href="#/${r}" class="${CUR === r ? "on" : ""}"${CUR === r ? ' aria-current="page"' : ""}><span>${l}</span><span class="ct">${c ? c() : ""}</span></a>`).join("")}</div>`).join("");
+}
+const side = $("#side"), scrim = $("#scrim");
+const closeDrawer = () => { side.classList.remove("open"); scrim.classList.remove("open"); };
+$("#menuBtn").onclick = () => { side.classList.add("open"); scrim.classList.add("open"); };
+scrim.onclick = closeDrawer;
+
+// ---------- router ----------
+const LABELS = {python: "Most-asked Python", dsa: "Most-asked DSA", patterns: "Pattern finder", rapid: "Rapid fire", traps: "Interview traps", revise: "Last-minute revision", quiz: "Quiz", flash: "Flashcards", mock: "Mock interview", mistakes: "Mistake review", path: "Learning path"};
+const ROUTES = {};
+function route() {
+  const h = (location.hash || "").replace(/^#\/?/, "") || "dashboard";
+  const [name, ...rest] = h.split("/");
+  const arg = decodeURIComponent(rest.join("/"));
+  CUR = ROUTES[name] ? name : "dashboard";
+  CODES.length = 0;
+  view.innerHTML = "";
+  ROUTES[CUR](arg);
+  renderNav();
+  closeDrawer();
+  if (CUR !== "dashboard" && CUR !== "search" && LABELS[CUR]) { S.last = {href: "#/" + CUR, label: LABELS[CUR]}; try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+  if (arg && CUR !== "search") {
+    const el = view.querySelector(`[data-id="${CSS.escape(arg)}"]`);
+    if (el) { el.classList.add("open"); el.querySelector(".ihead")?.setAttribute("aria-expanded", "true"); requestAnimationFrame(() => el.scrollIntoView({block: "start"})); return; }
+  }
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", route);
+
+// expandable items
+view.addEventListener("click", e => {
+  const h = e.target.closest(".ihead");
+  if (h) { const it = h.parentElement; it.classList.toggle("open"); h.setAttribute("aria-expanded", it.classList.contains("open")); return; }
+  const r = e.target.closest("[data-reveal]");
+  if (r) {
+    const box = r.closest(".item, .panel, .rf") || view;
+    box.querySelectorAll(`[data-part="${r.dataset.reveal}"]`).forEach(x => x.classList.remove("hidden"));
+    if (r.dataset.hide !== "keep") r.classList.add("hidden");
+    if (r.dataset.trap) { S.traps[r.dataset.trap] = 1; save(); }
+  }
+});
+const head = (title, sub) => `<div class="pagehead"><h1>${title}</h1>${sub ? `<p>${sub}</p>` : ""}</div>`;
+const tagLink = t => `<a class="tag" href="#/search/${encodeURIComponent(t)}">${esc(t)}</a>`;
+
+// ---------- DASHBOARD ----------
+ROUTES.dashboard = () => {
+  const st = stats(), p = st.p;
+  const bar = v => { const f = Math.round(v / 10); return "█".repeat(f) + `<i>${"░".repeat(10 - f)}</i>`; };
+  const line = (lab, v, cls = "") => `<div class="rl ${cls}"><span class="lab">${lab}</span><span class="bar">${bar(v)}</span><span class="pc">${v}%</span></div>`;
+  const weak = weakAreas().slice(0, 6);
+  const recs = [];
+  const nextPy = PY.filter(q => q.freq >= 5 && S.py[q.id] !== "got").slice(0, 2);
+  nextPy.forEach(q => recs.push([`Python: ${strip(q.q)}`, `#/python/${q.id}`]));
+  const nextDsa = DSA.filter(q => q.freq >= 5 && S.dsa[q.id] !== "solved").slice(0, 2);
+  nextDsa.forEach(q => recs.push([`Solve: ${q.title}`, `#/dsa/${q.id}`]));
+  const trapsLeft = TRAPS.length - Object.keys(S.traps).length;
+  if (trapsLeft) recs.push([`${trapsLeft} interview traps you haven't predicted yet`, "#/traps"]);
+  const due = rfDue(); if (due) recs.push([`${due} flashcards due for review`, "#/flash"]);
+  if (weak.length) recs.push([`Weakest area: ${weak[0][0]}`, `#/search/${encodeURIComponent(weak[0][0])}`]);
+  if (!S.mock.length) recs.push(["Take your first mock interview", "#/mock"]);
+  const qs = S.quiz.slice(-8);
+  view.innerHTML = `
+  ${head("Dashboard", "Interview essentials: the questions, problems and patterns interviewers ask most. Work through them, then test yourself.")}
+  <div class="readout" aria-label="Progress overview">
+    <div class="rhead"># progress, from what you've marked and scored</div>
+    ${line("Python questions", p.py)}${line("DSA problems", p.dsa)}${line("Patterns", p.pat)}${line("Rapid fire known", p.rf)}${line("Quiz average", p.quiz)}${line("Mock interviews", p.mock)}
+    <hr>${line("Interview readiness", p.ready, "total")}
+  </div>
+  <div class="grid2">
+    <div class="panel"><h3>Continue</h3>
+      ${S.last ? `<p class="muted small">Last visited: ${esc(S.last.label)}</p><a class="btn pri" href="${S.last.href}">Continue</a>` : `<p class="muted small">Start with the questions asked in almost every Python interview.</p><a class="btn pri" href="#/python">Start with Python questions</a>`}
+    </div>
+    <div class="panel"><h3>Streak</h3><div class="stat">${streak()} ${streak() === 1 ? "day" : "days"}</div><p class="muted small">${S.days.length} active ${S.days.length === 1 ? "day" : "days"} in total. Any marked answer, quiz, or card counts.</p></div>
+    <div class="panel"><h3>Recent quiz scores</h3>
+      ${qs.length ? `<div class="minibars">${qs.map(q => { const v = pct(q.score, q.total); return `<div style="height:${Math.max(4, v)}%" title="${q.score}/${q.total}"><span>${v}</span></div>`; }).join("")}</div>`
+      : `<p class="muted small">No quizzes yet.</p><a class="btn" href="#/quiz">Take a 10-question quiz</a>`}
+    </div>
+  </div>
+  <div class="panel" style="margin-top:16px"><h2>If your interview were tomorrow</h2>
+    <p class="muted small">What to revise next, based on what you haven't covered and where you've slipped.</p>
+    ${recs.length ? `<ul class="reclist">${recs.slice(0, 7).map(([t, h]) => `<li><span>${esc(t)}</span><a class="btn" href="${h}">Open</a></li>`).join("")}</ul>` : `<p>You've covered every essential. Run a mock interview to stay sharp.</p>`}
+    <p style="margin-top:12px"><a href="#/revise">Open the last-minute revision sheet</a></p>
+  </div>
+  <div class="panel"><h3>Weak areas</h3>
+    ${weak.length ? `<div class="row" style="margin-top:8px">${weak.map(([t, n]) => `<a class="chip" href="#/search/${encodeURIComponent(t)}">${esc(t)} · ${n}</a>`).join("")}</div>` : `<p class="muted small">Nothing flagged yet. Wrong quiz answers, questions marked "Needs review" and problems marked "Revisit" show up here.</p>`}
+  </div>`;
+};
+
+// ---------- PYTHON QUESTIONS ----------
+let pyFilter = "all";
+ROUTES.python = () => {
+  const done = Object.values(S.py).filter(v => v === "got").length;
+  const filters = [["all", "All"], ["1", LV[1]], ["2", LV[2]], ["3", LV[3]], ["hot", "🔥 Most asked"], ["review", "Needs review"], ["new", "Not started"]];
+  const list = PY.filter(q => pyFilter === "all" || (pyFilter === "hot" ? q.freq >= 5 : pyFilter === "review" ? S.py[q.id] === "review" : pyFilter === "new" ? !S.py[q.id] : q.diff === +pyFilter));
+  view.innerHTML = head("Most-asked Python questions", `${done} of ${PY.length} marked as known. Answer each one out loud before revealing, the way you would in an interview.`) +
+    `<div class="chips">${filters.map(([k, l]) => `<button class="chip ${pyFilter === k ? "on" : ""}" data-f="${k}">${l}</button>`).join("")}</div>` +
+    (list.length ? list.map(pyItem).join("") : `<div class="empty">No questions match this filter.</div>`);
+  $$(".chip[data-f]").forEach(b => b.onclick = () => { pyFilter = b.dataset.f; ROUTES.python(); });
+  bindMarks("py");
+};
+function statusBadge(v, okLabel, revLabel) {
+  return v === "got" || v === "solved" ? `<span class="status ok">${okLabel}</span>` : v === "review" || v === "attempted" ? `<span class="status rev">${revLabel}</span>` : "";
+}
+function pyItem(q) {
+  return `<div class="item" data-id="${q.id}">
+  <button class="ihead" aria-expanded="false"><span class="qt">${q.q}</span><span class="chev">›</span>
+    <span class="meta"><span class="lvl">${LV[q.diff]}</span>${q.freq >= 5 ? `<span class="hot">🔥 Most asked</span>` : ""}<span class="tag">${q.topic}</span>${statusBadge(S.py[q.id], "Known", "Needs review")}</span></button>
+  <div class="ibody">
+    <div class="sec"><h3>What the interviewer is testing</h3><p>${q.tests}</p></div>
+    <div class="reveal-bar"><span class="hintline">Say your answer out loud first, then compare.</span>
+      <button class="btn" data-reveal="hint">Show hint</button><button class="btn pri" data-reveal="ans">Show answer</button></div>
+    <div class="sec hidden" data-part="hint"><div class="callout"><b>Hint:</b> ${q.hint}</div></div>
+    <div class="hidden" data-part="ans">
+      <div class="sec"><h3>Interview answer</h3><p>${q.answer}</p></div>
+      <div class="sec"><h3>Explanation</h3><p>${q.explain}</p>${codeBlock(q.code)}</div>
+      <div class="sec"><h3>Common wrong answer</h3><div class="callout bad">${q.wrong}</div></div>
+      <div class="sec"><h3>Likely follow-up</h3><p>${q.follow}</p></div>
+      <div class="sec"><h3>Related</h3><div class="row">${q.related.map(tagLink).join("")}</div></div>
+      <div class="sec row"><button class="btn good" data-mark="got" data-k="${q.id}">I knew this</button><button class="btn bad" data-mark="review" data-k="${q.id}">Needs review</button></div>
+    </div>
+  </div></div>`;
+}
+function bindMarks(store) {
+  $$("[data-mark]").forEach(b => b.onclick = () => {
+    S[store][b.dataset.k] = b.dataset.mark; save();
+    const it = b.closest(".item"); const meta = it.querySelector(".meta");
+    meta.querySelector(".status")?.remove();
+    meta.insertAdjacentHTML("beforeend", store === "py" ? statusBadge(b.dataset.mark, "Known", "Needs review") : statusBadge(b.dataset.mark, "Solved", "Revisit"));
+    toast(b.dataset.mark === "got" || b.dataset.mark === "solved" ? "Marked as done" : "Added to your review list");
+  });
+}
+
+// ---------- DSA PROBLEMS ----------
+let dsaFilter = "all";
+ROUTES.dsa = () => {
+  const done = Object.values(S.dsa).filter(v => v === "solved").length;
+  const pats = [...new Set(DSA.map(d => d.pattern))];
+  const list = DSA.filter(d => dsaFilter === "all" || (dsaFilter === "todo" ? S.dsa[d.id] !== "solved" : d.pattern === dsaFilter));
+  view.innerHTML = head("Most-asked DSA problems", `${done} of ${DSA.length} solved. Try each problem on paper or in your editor before opening the optimal solution.`) +
+    `<div class="chips"><button class="chip ${dsaFilter === "all" ? "on" : ""}" data-f="all">All</button><button class="chip ${dsaFilter === "todo" ? "on" : ""}" data-f="todo">Not solved</button>${pats.map(p => `<button class="chip ${dsaFilter === p ? "on" : ""}" data-f="${p}">${esc(patName(p))}</button>`).join("")}</div>` +
+    (list.length ? list.map(dsaItem).join("") : `<div class="empty">Every problem in this filter is solved.</div>`);
+  $$(".chip[data-f]").forEach(b => b.onclick = () => { dsaFilter = b.dataset.f; ROUTES.dsa(); });
+  bindMarks("dsa");
+};
+function dsaItem(d) {
+  const patLink = PAT[d.pattern] && PAT[d.pattern].signals ? `<a class="tag" href="#/patterns/${d.pattern}">${esc(patName(d.pattern))}</a>` : `<span class="tag">${esc(patName(d.pattern))}</span>`;
+  return `<div class="item" data-id="${d.id}">
+  <button class="ihead" aria-expanded="false"><span class="qt">${d.title}</span><span class="chev">›</span>
+    <span class="meta"><span class="lvl">${LV[d.diff]}</span>${d.freq >= 5 ? `<span class="hot">🔥 Most asked</span>` : ""}<span class="tag">${esc(patName(d.pattern))}</span>${statusBadge(S.dsa[d.id], "Solved", "Revisit")}</span></button>
+  <div class="ibody">
+    <div class="sec"><h3>Problem</h3><p>${d.prompt}</p></div>
+    <div class="sec"><h3>What the interviewer is testing</h3><p>${d.testing}</p></div>
+    <div class="reveal-bar"><span class="hintline">Work it out first: which pattern fits, and what's the brute force?</span>
+      <button class="btn" data-reveal="spot">How to spot the pattern</button><button class="btn" data-reveal="brute">Brute force</button><button class="btn pri" data-reveal="sol">Optimal solution</button></div>
+    <div class="sec hidden" data-part="spot"><div class="callout"><b>Pattern:</b> ${patLink} ${d.recognize}</div></div>
+    <div class="sec hidden" data-part="brute"><h3>Brute force</h3><p>${d.brute}</p></div>
+    <div class="hidden" data-part="sol">
+      <div class="sec"><h3>Optimal solution</h3>${codeBlock(d.code)}<div class="cx"><span>Time <b>${d.time}</b></span><span>Space <b>${d.space}</b></span></div></div>
+      <div class="sec"><h3>Dry run</h3><div class="plain">${esc(d.dry)}</div></div>
+      <div class="sec"><h3>Common mistakes</h3><div class="callout bad">${d.mistakes}</div></div>
+      <div class="sec"><h3>Follow-up questions</h3><p>${d.follow}</p></div>
+      <div class="sec row"><button class="btn good" data-mark="solved" data-k="${d.id}">I solved it</button><button class="btn bad" data-mark="attempted" data-k="${d.id}">Revisit later</button></div>
+    </div>
+  </div></div>`;
+}
+
+// ---------- PATTERNS ----------
+ROUTES.patterns = () => {
+  const dsaByTitle = Object.fromEntries(DSA.map(d => [d.title.toLowerCase(), d.id]));
+  view.innerHTML = head("Pattern finder", "Read the problem, spot the signal, pick the pattern. Start with the table, then learn each template until you can write it from memory.") +
+  `<div class="panel"><h2 style="margin-bottom:8px">When you see this, think that</h2><div class="tblwrap"><table class="tbl finder"><thead><tr><th>The problem mentions…</th><th>Reach for</th></tr></thead><tbody>
+  ${RECOGNIZE.map(([s, p]) => `<tr><td>${s}</td><td><a href="#/patterns/${p}">${esc(patName(p))}</a></td></tr>`).join("")}</tbody></table></div></div>` +
+  PATTERNS.map(p => `<div class="item" data-id="${p.id}">
+    <button class="ihead" aria-expanded="false"><span class="qt">${p.name}</span><span class="chev">›</span>
+      <span class="meta"><span class="muted small">${p.signals.slice(0, 3).join(", ")}</span>${S.pat[p.id] ? `<span class="status ok">Reviewed</span>` : ""}</span></button>
+    <div class="ibody">
+      <div class="sec"><h3>Signals in the problem statement</h3><div class="row">${p.signals.map(s => `<span class="tag">${s}</span>`).join("")}</div></div>
+      <div class="sec"><h3>Core idea</h3><p>${p.idea}</p></div>
+      <div class="sec"><h3>Template</h3>${codeBlock(p.code)}<div class="cx"><span>Complexity <b>${p.cx}</b></span></div></div>
+      <div class="sec"><h3>Watch out</h3><div class="callout bad">${p.pitfall}</div></div>
+      <div class="sec"><h3>Classic problems</h3><div class="row">${p.problems.map(t => dsaByTitle[t.toLowerCase()] ? `<a class="tag" href="#/dsa/${dsaByTitle[t.toLowerCase()]}">${t}</a>` : `<span class="tag">${t}</span>`).join("")}</div></div>
+      <div class="sec">${S.pat[p.id] ? `<span class="status ok">Reviewed</span>` : `<button class="btn good" data-pat="${p.id}">Mark as reviewed</button>`}</div>
+    </div></div>`).join("");
+  $$("[data-pat]").forEach(b => b.onclick = () => { S.pat[b.dataset.pat] = 1; save(); b.outerHTML = `<span class="status ok">Reviewed</span>`; toast("Pattern marked as reviewed"); });
+};
+
+// ---------- RAPID FIRE ----------
+ROUTES.rapid = () => {
+  view.innerHTML = head("Rapid fire", `${RAPID.length} short questions that show whether you really understand Python and DSA. Answer each in one breath, then reveal.`) +
+  `<div class="row" style="margin-bottom:16px"><a class="btn pri" href="#/flash">Practise as flashcards</a><span class="muted small">${rfKnown()} known · ${rfDue()} due</span></div>
+  <div class="panel">${RAPID.map(r => `<div class="rf" data-id="${r.id}"><div class="rfq"><span>${r.q}</span><button class="btn" data-reveal="${r.id}">Reveal</button></div>
+    <div class="rfa hidden" data-part="${r.id}">${r.a} <a class="tag" href="#/search/${encodeURIComponent(r.tag)}">${esc(r.tag)}</a></div></div>`).join("")}</div>`;
+};
+
+// ---------- TRAPS ----------
+ROUTES.traps = () => {
+  view.innerHTML = head("Interview traps", "Code that behaves differently from what most candidates expect. Predict the output before revealing it, and be ready to explain why.") +
+  TRAPS.map(t => `<div class="item" data-id="${t.id}">
+    <button class="ihead" aria-expanded="false"><span class="qt">${t.title}</span><span class="chev">›</span>
+      <span class="meta"><span class="tag">${esc(t.tag)}</span>${S.traps[t.id] ? `<span class="status ok">Seen</span>` : ""}</span></button>
+    <div class="ibody"><div class="sec"><h3>What does this print?</h3>${codeBlock(t.code)}</div>
+      <div class="reveal-bar"><span class="hintline">Commit to an answer first.</span><button class="btn pri" data-reveal="out" data-trap="${t.id}">Reveal output</button></div>
+      <div class="hidden" data-part="out"><div class="sec"><h3>Output</h3><div class="out">${esc(t.out)}</div></div><div class="sec"><h3>Why</h3><p>${t.why}</p></div></div>
+    </div></div>`).join("");
+};
+
+// ---------- REVISION ----------
+ROUTES.revise = () => {
+  const recap = PY.filter(q => q.freq >= 5).map(q => {
+    const a = strip(q.answer); const sents = a.match(/[^.]+?\.(?=\s|$)/g) || [a];
+    const first = sents[0].length < 60 && sents[1] ? sents[0] + sents[1] : sents[0];
+    return `<li><b>${q.q}</b><br><span class="muted">${esc(first)}</span></li>`; }).join("");
+  view.innerHTML = head("Last-minute revision", "Everything to skim in the hour before an interview: complexities, idioms, the answering method, and one-line answers to the most-asked questions.") +
+  `<div class="panel"><h2 style="margin-bottom:10px">Complexity of Python operations</h2><div class="cxgrid">
+  ${CX_TABLES.map(t => `<div class="tblwrap"><table class="tbl"><thead><tr><th>${t.name}</th><th>Cost</th></tr></thead><tbody>${t.rows.map(r => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join("")}</tbody></table></div>`).join("")}
+  </div></div>
+  <div class="panel"><h2>Python idioms for coding rounds</h2>${codeBlock(IDIOMS)}</div>
+  <div class="panel"><h2 style="margin-bottom:6px">How to answer a coding question</h2><ol class="plan">${PLAN.map(([t, d]) => `<li><span><b>${t}.</b> ${d}</span></li>`).join("")}</ol></div>
+  <div class="panel"><h2 style="margin-bottom:6px">One-line answers to the most-asked Python questions</h2><ul class="reclist">${recap}</ul></div>`;
+};
+
+// ---------- QUIZ ----------
+const TYPE = {mcq: "Multiple choice", tf: "True or false", predict: "Predict the output", bug: "Find the bug", fill: "Fill in the blank", code: "Choose the correct code"};
+let QZ = null;
+ROUTES.quiz = arg => {
+  if (arg === "mistakes" && !QZ) return startQuiz("mistakes");
+  if (QZ && !QZ.done) return quizQ();
+  if (QZ && QZ.done) QZ = null;
+  quizStart();
+};
+function quizStart() {
+  const mis = Object.keys(S.wrong).length;
+  const recent = S.quiz.slice(-5).reverse();
+  view.innerHTML = head("Quiz", "Ten questions at a time: predict the output, find the bug, multiple choice. Each answer explains why the other options are wrong.") +
+  `<div class="grid2" style="margin-top:0">
+    ${[["mixed", "Mixed", "Python and DSA"], ["py", "Python", "Language behaviour and gotchas"], ["dsa", "DSA", "Complexity, patterns, algorithms"]].map(([k, t, d]) =>
+      `<div class="panel"><h3>${t}</h3><p class="muted small">${d}</p><button class="btn pri" data-start="${k}">Start 10 questions</button></div>`).join("")}
+    <div class="panel"><h3>Mistakes only</h3><p class="muted small">${mis ? `${mis} question${mis === 1 ? "" : "s"} you got wrong before` : "Questions you get wrong will collect here."}</p><button class="btn" data-start="mistakes" ${mis ? "" : "disabled"}>Retry mistakes</button></div>
+  </div>
+  ${recent.length ? `<div class="panel"><h3>Recent scores</h3><ul class="reclist">${recent.map(q => `<li><span>${({mixed:"Mixed",py:"Python",dsa:"DSA",mistakes:"Mistakes"})[q.set] || esc(q.set)} quiz · ${new Date(q.t).toLocaleDateString()}</span><b style="font-family:var(--mono)">${q.score}/${q.total}</b></li>`).join("")}</ul></div>` : ""}`;
+  $$("[data-start]").forEach(b => b.onclick = () => startQuiz(b.dataset.start));
+}
+function startQuiz(set) {
+  let pool = set === "mistakes" ? QUIZ.filter(q => S.wrong[q.id]) : set === "mixed" ? QUIZ : QUIZ.filter(q => q.set === set);
+  if (!pool.length) { QZ = null; return quizStart(); }
+  QZ = {set, items: shuffle(pool).slice(0, 10), i: 0, score: 0, picked: null, wrongTags: {}, done: false};
+  if (location.hash !== "#/quiz") location.hash = "#/quiz"; else quizQ();
+}
+function quizQ() {
+  const q = QZ.items[QZ.i], ans = QZ.picked;
+  const L = "ABCD";
+  view.innerHTML = `<div class="qprog"><span>Question ${QZ.i + 1} of ${QZ.items.length}</span><span>Score ${QZ.score}</span></div>
+  <div class="track"><div style="width:${pct(QZ.i, QZ.items.length)}%"></div></div>
+  <div class="panel"><div class="qtype">${TYPE[q.type]}</div><h2 style="margin:6px 0 4px; font-weight:500">${q.q}</h2>${q.code ? codeBlock(q.code) : ""}
+  <div class="opts">${q.options.map((o, i) => {
+    let cls = ""; if (ans !== null) { if (i === q.ans) cls = "right"; else if (i === ans) cls = "wrongpick"; }
+    return `<button class="opt ${cls}" data-o="${i}" ${ans !== null ? "disabled" : ""}><span class="ol">${L[i]}</span><span>${o}</span></button>`; }).join("")}</div>
+  ${ans !== null ? `<div class="sec"><div class="callout ${ans === q.ans ? "good" : "bad"}"><b>${ans === q.ans ? "Correct." : "Not quite."}</b> ${q.explain}</div></div>
+    <div class="sec"><h3>Why the other options are wrong</h3><ul class="whylist">${q.why.map((w, i) => w ? `<li><b>${L[i]}:</b> ${w}</li>` : "").join("")}</ul></div>
+    <div class="sec"><h3>Concept</h3>${tagLink(q.tag)}</div>
+    <div class="sec"><h3>In an interview</h3><p>${q.interview}</p></div>
+    <div class="row" style="margin-top:14px"><button class="btn pri" id="qnext">${QZ.i + 1 < QZ.items.length ? "Next question" : "See your score"}</button></div>` : ""}
+  </div>`;
+  $$(".opt[data-o]").forEach(b => b.onclick = () => {
+    const i = +b.dataset.o; QZ.picked = i;
+    if (i === q.ans) { QZ.score++; delete S.wrong[q.id]; }
+    else { S.wrong[q.id] = (S.wrong[q.id] || 0) + 1; QZ.wrongTags[q.tag] = 1; }
+    save(); quizQ();
+    $("#qnext")?.focus();
+  });
+  const nx = $("#qnext");
+  if (nx) nx.onclick = () => { QZ.picked = null; QZ.i++; if (QZ.i >= QZ.items.length) { QZ.done = true; S.quiz.push({t: Date.now(), set: QZ.set, score: QZ.score, total: QZ.items.length}); S.quiz = S.quiz.slice(-50); save(); quizEnd(); } else { quizQ(); window.scrollTo(0, 0); } };
+}
+function quizEnd() {
+  const tags = Object.keys(QZ.wrongTags);
+  const v = pct(QZ.score, QZ.items.length);
+  view.innerHTML = head("Quiz complete") + `<div class="panel"><div class="muted small">Score</div><div class="score">${QZ.score}/${QZ.items.length}</div>
+  <p>${v === 100 ? "Perfect round." : v >= 70 ? "Solid. Review the misses below so they stick." : "Worth another pass. Review the topics below, then retry your mistakes."}</p>
+  ${tags.length ? `<div class="sec"><h3>Review</h3><div class="row">${tags.map(tagLink).join("")}</div></div>` : ""}
+  <div class="row" style="margin-top:16px">${Object.keys(S.wrong).length ? `<button class="btn pri" id="retry">Retry mistakes</button>` : ""}<button class="btn" id="again">New quiz</button></div></div>`;
+  const r = $("#retry"); if (r) r.onclick = () => startQuiz("mistakes");
+  $("#again").onclick = () => { QZ = null; quizStart(); };
+}
+
+// ---------- FLASHCARDS (Leitner) ----------
+const BOX_DAYS = [0, 0, 1, 3, 7, 14];
+let FC = null;
+ROUTES.flash = () => {
+  if (FC && FC.queue.length) return fcCard();
+  const counts = [1, 2, 3, 4, 5].map(b => RAPID.filter(r => (S.rf[r.id] ? S.rf[r.id].box : 0) === b).length);
+  const unseen = RAPID.filter(r => !S.rf[r.id]).length;
+  const due = rfDue();
+  view.innerHTML = head("Flashcards", "Spaced repetition: cards you know come back less often, cards you miss come back tomorrow. Ten minutes a day is enough.") +
+  `<div class="panel"><div class="row" style="justify-content:space-between"><div><div class="stat">${due}</div><div class="muted small">cards due now</div></div>
+  <div class="row"><button class="btn pri" id="fcgo" ${due ? "" : "disabled"}>Review due cards</button><button class="btn" id="fcall">Study all</button></div></div>
+  <div class="boxes" style="margin-top:16px"><div><b>${unseen}</b>New</div>${counts.map((c, i) => `<div><b>${c}</b>Box ${i + 1}</div>`).join("")}</div>
+  <p class="muted small" style="margin-top:10px">Box 1 repeats in the same session, box 2 tomorrow, then 3, 7 and 14 days.</p></div>`;
+  $("#fcgo").onclick = () => fcStart(true);
+  $("#fcall").onclick = () => fcStart(false);
+};
+function fcStart(onlyDue) {
+  const pool = onlyDue ? RAPID.filter(r => !S.rf[r.id] || S.rf[r.id].due <= Date.now()) : RAPID;
+  FC = {queue: shuffle(pool).slice(0, 15), flipped: false, done: 0, known: 0};
+  fcCard();
+}
+function fcCard() {
+  if (!FC.queue.length) {
+    view.innerHTML = head("Session complete") + `<div class="panel"><p>You reviewed ${FC.done} cards and knew ${FC.known} on the first try.</p><div class="row"><button class="btn pri" id="fcback">Back to flashcards</button><a class="btn" href="#/quiz">Take a quiz</a></div></div>`;
+    $("#fcback").onclick = () => { FC = null; ROUTES.flash(); };
+    return;
+  }
+  const c = FC.queue[0];
+  view.innerHTML = `<div class="qprog"><span>${FC.queue.length} left in this session</span><button class="btn" id="fcend">End session</button></div>
+  <button class="fc ${FC.flipped ? "back" : ""}" id="card" aria-live="polite"><div class="side-lab">${FC.flipped ? "Answer" : "Question · press Space or tap to flip"}</div><div>${FC.flipped ? c.a : c.q}</div></button>
+  <div class="row" style="justify-content:center; margin-top:16px">${FC.flipped ? `<button class="btn bad" id="no">Didn't know (1)</button><button class="btn good" id="yes">Knew it (2)</button>` : `<button class="btn pri" id="flip">Show answer</button>`}</div>`;
+  const flip = () => { FC.flipped = true; fcCard(); };
+  $("#card").onclick = () => { if (!FC.flipped) flip(); };
+  $("#flip") && ($("#flip").onclick = flip);
+  $("#fcend").onclick = () => { FC = null; ROUTES.flash(); };
+  const grade = ok => {
+    const cur = S.rf[c.id] || {box: 0};
+    const box = ok ? Math.min(5, Math.max(1, cur.box) + 1) : 1;
+    S.rf[c.id] = {box, due: Date.now() + BOX_DAYS[box] * DAY};
+    FC.queue.shift(); FC.done++;
+    if (ok && !c._missed) FC.known++;
+    if (!ok) { c._missed = true; FC.queue.push(c); }
+    FC.flipped = false; save(); fcCard();
+  };
+  if ($("#yes")) { $("#yes").onclick = () => grade(true); $("#no").onclick = () => grade(false); }
+  fcCard.key = e => {
+    if (CUR !== "flash" || !FC || !FC.queue.length) return;
+    if (e.target.matches("input, textarea")) return;
+    if (!FC.flipped && (e.key === " " || e.key === "Enter")) { e.preventDefault(); flip(); }
+    else if (FC.flipped && e.key === "1") grade(false);
+    else if (FC.flipped && e.key === "2") grade(true);
+  };
+}
+document.addEventListener("keydown", e => fcCard.key && fcCard.key(e));
+
+// ---------- MOCK INTERVIEW ----------
+const MOCK_BANK = [
+  ...PY.map(q => ({id: q.id, diff: q.diff, track: "py", q: q.q, answer: q.answer, points: q.points, follow: q.follow})),
+  ...MOCK_EXTRA
+];
+const MOCK = {session: null};
+ROUTES.mock = () => {
+  if (MOCK.session) return mockTurn();
+  const recent = S.mock.slice(-5).reverse();
+  view.innerHTML = head("Mock interview", "One question at a time, in an interviewer's voice. Type your answer as you'd say it. Questions get harder when you answer well and easier when you struggle.") +
+  `<div class="panel"><h3>Grading</h3>
+    <p class="small">${!sampleChecked ? "Checking whether AI grading is available…" : SAMPLE ? "Your answers are graded by Claude: correctness, missing points, a stronger answer, and a follow-up question. This uses your own Claude usage, and you'll be asked to allow it the first time." : "AI grading isn't available in this view, so you'll grade yourself against a checklist of key points and a model answer."}</p>
+    ${SAMPLE ? `<label class="small row" style="gap:8px"><input type="checkbox" id="selfmode"> Grade myself instead (checklist)</label>` : ""}
+  </div>
+  <div class="grid2" style="margin-top:0">${[["py", "Python", "Language, OOP, internals"], ["dsa", "DSA concepts", "Complexity, patterns, algorithms"], ["mixed", "Mixed", "The full interview"]].map(([k, t, d]) =>
+    `<div class="panel"><h3>${t}</h3><p class="muted small">${d}</p><button class="btn pri" data-track="${k}">Start interview</button></div>`).join("")}</div>
+  ${recent.length ? `<div class="panel"><h3>Past sessions</h3><ul class="reclist">${recent.map(m => `<li><span>${esc(m.track)} · ${m.n} answers · ${new Date(m.t).toLocaleDateString()}</span><b style="font-family:var(--mono)">${m.avg.toFixed(1)}/10</b></li>`).join("")}</ul></div>` : ""}`;
+  $$("[data-track]").forEach(b => b.onclick = () => {
+    const self = $("#selfmode") && $("#selfmode").checked;
+    MOCK.session = {track: b.dataset.track, ai: !!SAMPLE && !self, level: 1, asked: new Set(), cur: null, phase: "ask", scores: [], result: null, followUp: null};
+    nextMockQ(); mockTurn();
+  });
+};
+function nextMockQ() {
+  const s = MOCK.session;
+  const pool = MOCK_BANK.filter(q => (s.track === "mixed" || q.track === s.track) && !s.asked.has(q.id));
+  if (!pool.length) { s.cur = null; return; }
+  let best = pool.filter(q => q.diff === s.level);
+  if (!best.length) best = pool.slice().sort((a, b) => Math.abs(a.diff - s.level) - Math.abs(b.diff - s.level)).filter((q, _, arr) => Math.abs(q.diff - s.level) === Math.abs(arr[0].diff - s.level));
+  s.cur = shuffle(best)[0]; s.asked.add(s.cur.id); s.phase = "ask"; s.result = null; s.followUp = null; s.draft = "";
+}
+function mockTurn() {
+  const s = MOCK.session;
+  if (!s.cur) return mockEnd();
+  const qText = s.followUp ? s.followUp : s.cur.q;
+  const n = s.scores.length;
+  let body = `<div class="qprog"><span>Answer ${n + 1} · ${LV[s.cur.diff]}${s.followUp ? " · follow-up" : ""}</span><button class="btn" id="mend">End interview</button></div>
+  <div class="bubble"><div class="who">Interviewer</div><div style="font-size:1.05rem">${s.followUp ? esc(qText) : qText}</div></div>`;
+  if (s.phase === "ask") {
+    body += `<textarea id="ans" placeholder="Answer as you would out loud. Aim for 3–6 sentences: definition, how it works, an example, a trade-off.">${esc(s.draft || "")}</textarea>
+    <div class="row" style="margin-top:10px"><button class="btn pri" id="submit">Submit answer</button><button class="btn" id="skip">Skip question</button></div>`;
+  } else if (s.phase === "grading") {
+    body += `<div class="bubble" style="background:var(--surface)"><div class="who">You</div>${esc(s.draft).replace(/\n/g, "<br>")}</div><div class="panel"><p class="muted" id="gstat">Grading your answer… this can take up to a minute.</p><button class="btn" id="stop">Stop</button></div>`;
+  } else if (s.phase === "self") {
+    const pts = s.cur.points || [];
+    body += `<div class="bubble" style="background:var(--surface)"><div class="who">You</div>${esc(s.draft).replace(/\n/g, "<br>")}</div>
+    <div class="panel"><h3>Tick each point your answer covered</h3><div class="checks">${pts.map((p, i) => `<label><input type="checkbox" data-pt="${i}"> <span>${esc(p)}</span></label>`).join("")}</div>
+    <div class="sec"><h3>Model answer</h3><p>${s.cur.answer}</p></div>
+    <button class="btn pri" id="selfscore">Score my answer</button></div>`;
+  } else if (s.phase === "result") {
+    const r = s.result;
+    body += `<div class="bubble" style="background:var(--surface)"><div class="who">You</div>${esc(s.draft).replace(/\n/g, "<br>")}</div>
+    <div class="panel"><div class="gradebox"><div><div class="score">${r.score}${typeof r.score === "number" ? "/10" : ""}</div><div class="muted small">${esc(r.verdict || "")}</div></div>
+    <div>${r.strengths && r.strengths.length ? `<h3>What was good</h3><ul class="tight">${r.strengths.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+    ${r.missing && r.missing.length ? `<h3 style="margin-top:8px">Missing points</h3><ul class="tight">${r.missing.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}
+    ${r.inaccuracies && r.inaccuracies.length ? `<h3 style="margin-top:8px">Technical inaccuracies</h3><ul class="tight">${r.inaccuracies.map(x => `<li>${esc(x)}</li>`).join("")}</ul>` : ""}</div></div>
+    ${r.better ? `<div class="sec"><h3>A stronger interview answer</h3><div class="callout good">${r.betterHtml ? r.better : esc(r.better)}</div></div>` : ""}
+    <div class="row" style="margin-top:14px">${r.follow ? `<button class="btn pri" id="dofollow">Answer the follow-up</button>` : ""}<button class="btn ${r.follow ? "" : "pri"}" id="mnext">Next question</button></div>
+    ${r.follow ? `<p class="muted small" style="margin-top:8px">Follow-up: ${esc(strip(r.follow))}</p>` : ""}</div>`;
+  }
+  view.innerHTML = body;
+  $("#mend").onclick = mockEnd;
+  const ans = $("#ans");
+  if (ans) { ans.oninput = () => s.draft = ans.value; ans.focus(); }
+  $("#skip") && ($("#skip").onclick = () => { nextMockQ(); mockTurn(); });
+  $("#submit") && ($("#submit").onclick = () => {
+    s.draft = ans.value.trim();
+    if (s.draft.length < 10) { toast("Write a little more first, even a rough answer."); return; }
+    if (s.ai) { s.phase = "grading"; mockTurn(); aiGrade(); }
+    else if (s.followUp) { s.result = {score: "–", verdict: "Self-review", better: "", follow: null}; s.phase = "result"; mockTurn(); }
+    else { s.phase = "self"; mockTurn(); }
+  });
+  $("#selfscore") && ($("#selfscore").onclick = () => {
+    const boxes = $$("[data-pt]"); const got = boxes.filter(b => b.checked).length;
+    const score = Math.round(10 * got / Math.max(1, boxes.length));
+    const missing = boxes.filter(b => !b.checked).map(b => (s.cur.points || [])[+b.dataset.pt]);
+    s.scores.push(score); adjustLevel(score);
+    s.result = {score, verdict: score >= 7 ? "Strong" : score >= 4 ? "Partly there" : "Needs work", missing, better: "", follow: s.cur.follow};
+    s.phase = "result"; mockTurn();
+  });
+  $("#dofollow") && ($("#dofollow").onclick = () => { s.followUp = strip(s.result.follow); s.phase = "ask"; s.draft = ""; s.result = null; mockTurn(); });
+  $("#mnext") && ($("#mnext").onclick = () => { nextMockQ(); mockTurn(); window.scrollTo(0, 0); });
+  $("#stop") && ($("#stop").onclick = () => { s.ctl && s.ctl.abort(); });
+}
+function adjustLevel(score) { const s = MOCK.session; if (score >= 7) s.level = Math.min(3, s.level + 1); else if (score <= 3) s.level = Math.max(1, s.level - 1); }
+async function aiGrade() {
+  const s = MOCK.session, item = s.cur;
+  const q = s.followUp || strip(item.q);
+  const ref = s.followUp ? "None provided. Use your own expert knowledge of Python and data structures." :
+    `Key points:\n- ${item.points.join("\n- ")}\nReference answer: ${strip(item.answer)}`;
+  const prompt = `You are a senior software engineer running a Python and DSA technical interview. Grade the candidate's answer fairly and precisely, as a real interviewer would.
+
+Question: ${q}
+
+Reference for grading (the candidate has not seen this):
+${ref}
+
+Candidate's answer:
+"""${s.draft}"""
+
+Grade on correctness, completeness and technical accuracy. Distinguish Python language behaviour from CPython implementation details where relevant. Don't reward length for its own sake.
+
+Respond with ONLY a JSON object, no markdown, with exactly these keys:
+"score": integer 0-10,
+"verdict": one of "Strong", "Partly there", "Needs work",
+"strengths": array of up to 3 short strings,
+"missing": array of up to 4 short strings naming important points the answer left out,
+"inaccuracies": array of short strings naming anything technically wrong (empty if none),
+"better_answer": a concise ideal spoken interview answer of 3-6 sentences, plain text,
+"follow_up": one harder follow-up question an interviewer would ask next, plain text.`;
+  s.ctl = new AbortController();
+  try {
+    const r = await SAMPLE.json(prompt, {signal: s.ctl.signal, modelTier: "default"});
+    if (MOCK.session !== s) return;
+    const score = Math.max(0, Math.min(10, Math.round(+r.score || 0)));
+    s.scores.push(score); adjustLevel(score);
+    s.result = {score, verdict: r.verdict, strengths: r.strengths || [], missing: r.missing || [], inaccuracies: r.inaccuracies || [], better: r.better_answer || "", follow: r.follow_up || null};
+    s.phase = "result"; mockTurn();
+  } catch (e) {
+    if (MOCK.session !== s) return;
+    const code = e && e.code;
+    if (code === "not_granted") { s.ai = false; SAMPLE = null; toast("AI grading wasn't allowed. Switched to self-check."); }
+    else if (code === "rate_limited") toast("Too many requests. Wait a moment, then submit again.");
+    else if (code === "cancelled") toast("Grading stopped.");
+    else toast("Grading failed. Submit again, or grade yourself.");
+    if (s.followUp && !s.ai) { s.result = {score: "–", verdict: "Self-review", follow: null}; s.phase = "result"; }
+    else s.phase = s.ai ? "ask" : "self";
+    mockTurn();
+  }
+}
+function mockEnd() {
+  const s = MOCK.session; if (!s) return ROUTES.mock();
+  const nums = s.scores.filter(x => typeof x === "number");
+  const avg = nums.length ? nums.reduce((a, b) => a + b, 0) / nums.length : 0;
+  if (nums.length) { S.mock.push({t: Date.now(), track: s.track === "py" ? "Python" : s.track === "dsa" ? "DSA" : "Mixed", n: nums.length, avg}); S.mock = S.mock.slice(-50); save(); }
+  MOCK.session = null;
+  view.innerHTML = head("Interview finished") + `<div class="panel">${nums.length ? `<div class="muted small">Average score</div><div class="score">${avg.toFixed(1)}/10</div><p>${nums.length} answer${nums.length === 1 ? "" : "s"} graded. ${avg >= 7 ? "Interview-ready on these topics." : avg >= 4 ? "Good foundation. Review the missing points and go again." : "Revise the most-asked questions, then try again."}</p>` : `<p>No answers were graded in this session.</p>`}
+  <div class="row"><button class="btn pri" id="again">Start another interview</button><a class="btn" href="#/python">Review Python questions</a></div></div>`;
+  $("#again").onclick = () => ROUTES.mock();
+}
+
+// ---------- MISTAKES ----------
+ROUTES.mistakes = () => {
+  const qw = QUIZ.filter(q => S.wrong[q.id]);
+  const pr = PY.filter(q => S.py[q.id] === "review");
+  const dr = DSA.filter(q => S.dsa[q.id] === "attempted");
+  const none = !qw.length && !pr.length && !dr.length;
+  view.innerHTML = head("Mistake review", "Everything you got wrong or flagged, in one place. Clear a quiz mistake by answering it correctly; clear a flag by marking the item as known.") +
+  (none ? `<div class="panel empty">Nothing to review yet. Take a quiz or mark questions as "Needs review" and they'll appear here.<div style="margin-top:12px"><a class="btn pri" href="#/quiz">Take a quiz</a></div></div>` : `
+  ${qw.length ? `<div class="panel"><div class="row" style="justify-content:space-between"><h2>Quiz questions you missed</h2><button class="btn pri" id="retry">Retry these</button></div>
+    <ul class="reclist">${qw.map(q => `<li><span>${q.q}${q.code ? ` <span class="muted small">(code)</span>` : ""}</span><span class="tag">${esc(q.tag)}</span></li>`).join("")}</ul></div>` : ""}
+  ${pr.length ? `<div class="panel"><h2>Python questions to review</h2><ul class="reclist">${pr.map(q => `<li><span>${q.q}</span><a class="btn" href="#/python/${q.id}">Open</a></li>`).join("")}</ul></div>` : ""}
+  ${dr.length ? `<div class="panel"><h2>Problems to revisit</h2><ul class="reclist">${dr.map(q => `<li><span>${q.title}</span><a class="btn" href="#/dsa/${q.id}">Open</a></li>`).join("")}</ul></div>` : ""}`);
+  const r = $("#retry"); if (r) r.onclick = () => { QZ = null; startQuiz("mistakes"); };
+};
+
+// ---------- LEARNING PATH ----------
+ROUTES.path = () => {
+  view.innerHTML = head("Learning path", "This first batch covers interview essentials across the whole syllabus. The full beginner-to-advanced modules below are being added in batches, each with the same Learn → Practice → Quiz → Interview → Revise flow.") +
+  `<div class="panel"><h2>Available now</h2><p class="small">${PY.length} Python interview questions, ${DSA.length} DSA problems, ${PATTERNS.length} patterns, ${RAPID.length} rapid-fire questions, ${TRAPS.length} traps, ${QUIZ.length} quiz questions, flashcards and mock interviews.</p></div>
+  <div class="pathcols"><div class="panel"><h2 style="margin-bottom:8px">Python modules</h2><ol>${PATH.python.map(m => `<li>${m} <span class="muted small">· planned</span></li>`).join("")}</ol></div>
+  <div class="panel"><h2 style="margin-bottom:8px">DSA modules</h2><ol>${PATH.dsa.map(m => `<li>${m} <span class="muted small">· planned</span></li>`).join("")}</ol></div></div>`;
+};
+
+// ---------- SEARCH ----------
+const INDEX = [
+  ...PY.map(q => ({type: "Python question", title: strip(q.q), text: [q.topic, q.tag, q.answer, q.related.join(" ")].map(strip).join(" "), href: `#/python/${q.id}`})),
+  ...DSA.map(d => ({type: "DSA problem", title: d.title, text: [patName(d.pattern), d.prompt, d.recognize].map(strip).join(" "), href: `#/dsa/${d.id}`})),
+  ...PATTERNS.map(p => ({type: "Pattern", title: p.name, text: [p.signals.join(" "), p.idea, p.problems.join(" ")].map(strip).join(" "), href: `#/patterns/${p.id}`})),
+  ...RAPID.map(r => ({type: "Rapid fire", title: strip(r.q), text: strip(r.a) + " " + r.tag, href: `#/rapid/${r.id}`})),
+  ...TRAPS.map(t => ({type: "Trap", title: strip(t.title), text: t.tag + " " + strip(t.why) + " " + t.code, href: `#/traps/${t.id}`})),
+  ...CX_TABLES.map(t => ({type: "Complexity table", title: `Complexity: ${t.name}`, text: t.rows.map(r => r.join(" ")).join(" "), href: "#/revise"})),
+  {type: "Revision", title: "Python idioms for coding rounds", text: IDIOMS, href: "#/revise"},
+  {type: "Revision", title: "How to answer a coding question", text: PLAN.map(p => p.join(" ")).join(" "), href: "#/revise"}
+].map(e => ({...e, lt: e.title.toLowerCase(), lx: e.text.toLowerCase()}));
+function search(q) {
+  const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
+  if (!terms.length) return [];
+  const full = q.toLowerCase().trim();
+  return INDEX.map(e => {
+    let sc = 0;
+    for (const t of terms) { if (e.lt.includes(t)) sc += 6; else if (e.lx.includes(t)) sc += 1; else return null; }
+    if (e.lt.includes(full)) sc += 10;
+    if (e.lt.startsWith(full)) sc += 4;
+    return {e, sc};
+  }).filter(Boolean).sort((a, b) => b.sc - a.sc).map(x => x.e);
+}
+ROUTES.search = arg => {
+  const res = search(arg || "");
+  view.innerHTML = head(`Results for “${esc(arg)}”`, `${res.length} match${res.length === 1 ? "" : "es"}`) +
+    (res.length ? `<div class="panel"><ul class="reclist">${res.map(r => `<li><span><span class="rt muted small">${r.type}</span><br>${esc(r.title)}</span><a class="btn" href="${r.href}">Open</a></li>`).join("")}</ul></div>`
+      : `<div class="panel empty">Nothing matched. Try a shorter term, such as “dict”, “heap” or “closure”.</div>`);
+};
+const qin = $("#q"), resBox = $("#results");
+let sel = -1;
+function showResults() {
+  const v = qin.value.trim();
+  const r = search(v).slice(0, 8); sel = -1;
+  if (!v) { resBox.classList.remove("open"); return; }
+  resBox.innerHTML = r.length ? r.map((x, i) => `<a href="${x.href}" data-i="${i}"><div class="rt">${x.type}</div>${esc(x.title)}</a>`).join("") + `<a href="#/search/${encodeURIComponent(v)}"><div class="rt">All results</div>See every match for “${esc(v)}”</a>`
+    : `<a href="#/search/${encodeURIComponent(v)}"><div class="rt">No quick matches</div>Search for “${esc(v)}”</a>`;
+  resBox.classList.add("open");
+}
+qin.addEventListener("input", showResults);
+qin.addEventListener("focus", showResults);
+qin.addEventListener("keydown", e => {
+  const links = $$("a", resBox);
+  if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+    e.preventDefault(); if (!links.length) return;
+    sel = (sel + (e.key === "ArrowDown" ? 1 : -1) + links.length) % links.length;
+    links.forEach((l, i) => l.classList.toggle("sel", i === sel));
+  } else if (e.key === "Enter") {
+    e.preventDefault();
+    const target = sel >= 0 ? links[sel] : null;
+    location.hash = target ? target.getAttribute("href") : `#/search/${encodeURIComponent(qin.value.trim())}`;
+    resBox.classList.remove("open"); qin.blur();
+  } else if (e.key === "Escape") { resBox.classList.remove("open"); qin.blur(); }
+});
+resBox.addEventListener("click", () => { resBox.classList.remove("open"); qin.value = ""; });
+document.addEventListener("click", e => { if (!e.target.closest(".search")) resBox.classList.remove("open"); });
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && !e.target.matches("input, textarea")) { e.preventDefault(); qin.focus(); }
+});
+
+// ---------- boot ----------
+route();
+initSync();
+initSample();
+
+</script>
+</body>
+</html>
